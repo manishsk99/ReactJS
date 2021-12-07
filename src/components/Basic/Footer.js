@@ -1,17 +1,17 @@
-import { Container} from 'react-bootstrap';
+import { Container } from 'react-bootstrap';
 import './Basic.css';
-import {BRAND_NAME, THEME_COLOR} from './Constants';
+import { BRAND_NAME, THEME_COLOR } from './Constants';
 
 function Footer() {
     return (
         <>
-            <div className={`bg-${THEME_COLOR} text-white w-100 p-4 position-absolute bottom-0`}>
-                <Container className="position-relative">
-                    <div className="position-absolute translate-middle-y start-0">
-                        @2021 {BRAND_NAME}. All rights reserved.
-                    </div>
-                    <div className="position-absolute translate-middle-y end-0">
-                        <div>
+            <div className={`bg-${THEME_COLOR} text-white w-100 p-3`}>
+                <Container>
+                    <div className="row">
+                        <div className="col-sm-6">
+                            @2021 {BRAND_NAME}. All rights reserved.
+                        </div>
+                        <div className="col-sm-6 text-sm-end">
                             <a href="https://www.facebook.com/" target="_blank">
                                 <img className="social-img" src="images/facebook.png" alt="fb" />
                             </a>

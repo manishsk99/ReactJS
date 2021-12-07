@@ -1,5 +1,3 @@
-
-
 .social-img {
     width: 25px;
     height: 25px;
@@ -8,4 +6,8 @@
     border-radius: 10%;
     border: 1px #fff solid;
     padding: 1px;
+  }
+
+  .app-body{
+      min-height: 83vh;
   }
