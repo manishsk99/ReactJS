@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { THEME_COLOR } from './Constants';
 
@@ -30,9 +29,10 @@ function Login() {
                     <input className={`form-control btn btn-${THEME_COLOR}`} type="submit" 
                     onSubmit={(e) => doLogin(e)} value="Login" />
                     <br />
-
+                    <br />
                     <span>Don't have an account? <Link to="/signup">Signup</Link></span>
-                    <Link to="/forgetPassword">Forgot your password?</Link>
+                    <br />
+                    Forgot your password? <Link to="/forgetPassword">Click here</Link>
                 </form>
                 
             </div>

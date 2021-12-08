@@ -1,5 +1,4 @@
 import { Container } from 'react-bootstrap';
-import './Basic.css';
 import { BRAND_NAME, THEME_COLOR } from './Constants';
 
 function Footer() {
@@ -9,7 +8,7 @@ function Footer() {
                 <Container>
                     <div className="row">
                         <div className="col-sm-6">
-                            @2021 {BRAND_NAME}. All rights reserved.
+                        &copy; 2021 {BRAND_NAME}. All rights reserved.
                         </div>
                         <div className="col-sm-6 text-sm-end">
                             <a href="https://www.facebook.com/" target="_blank">

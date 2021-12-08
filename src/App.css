@@ -36,15 +36,3 @@
     transform: rotate(360deg);
   }
 }
-
-.nav-link {
-  padding-top: 0.25rem !important;
-  padding-bottom: 0.25rem !important;
-}
-
-@media (min-width: 576px) {
-  .nav-link {
-    padding-top: 0 !important;
-    padding-bottom: 0 !important;
-  }
-}
