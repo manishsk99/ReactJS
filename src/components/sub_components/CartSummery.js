@@ -9,15 +9,15 @@ function CartSummary() {
             </thead>
             <tbody>
                 <tr>
-                    <td scope="row">Price</td>
+                    <td>Price</td>
                     <td className="text-end">&#x20B9; 1000.00</td>
                 </tr>
                 <tr>
-                    <td scope="row">Discount</td>
+                    <td>Discount</td>
                     <td className="text-end">&#x20B9; 100.00</td>
                 </tr>
                 <tr>
-                    <td scope="row">Delivery Charges</td>
+                    <td>Delivery Charges</td>
                     <td className="text-end">&#x20B9; 40.00</td>
                 </tr>
             </tbody>

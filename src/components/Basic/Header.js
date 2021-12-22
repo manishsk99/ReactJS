@@ -9,7 +9,7 @@ function Header() {
             <Navbar collapseOnSelect expand="sm" bg={THEME_COLOR} variant="dark">
                 <Container>
                     
-                    {/* <Link className="navbar-brand" to="/"><img src="././epur_big_logo.png" width="100" height="30" class="d-inline-block align-top" alt="e-PUR"/></Link>  */}
+                    {/* <Link className="navbar-brand" to="/"><img src="././epur_big_logo.png" width="100" height="30" className="d-inline-block align-top" alt="e-PUR"/></Link>  */}
                     <Link className="navbar-brand" to="/">e-PUR</Link>
                     <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                     <Navbar.Collapse id="responsive-navbar-nav">
@@ -22,9 +22,9 @@ function Header() {
                         
                             <Nav.Link eventKey="4"><Link className="nav-link text-white position-relative" to="/cart">
                                 <BsCartFill/>
-                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
                                     5
-                                    <span class="visually-hidden">No. of items</span>
+                                    <span className="visually-hidden">No. of items</span>
                                 </span>
                                 </Link></Nav.Link>
                             <Nav.Link eventKey="5"><Link className="nav-link" to="/login">Login</Link></Nav.Link>

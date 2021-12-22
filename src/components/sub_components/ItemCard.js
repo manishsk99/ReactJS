@@ -12,7 +12,7 @@ function ItemCard(props) {
                     </p>
                     <div className="row">
                         <div className="col-4">
-                            <a href="#" class="btn btn-outline-primary">view</a>
+                            <a href="#" className="btn btn-outline-primary">view</a>
                         </div>
                         <div className="col-8 text-end">
                             <a href="#" className="btn btn-primary ">Add to cart</a>
@@ -20,8 +20,8 @@ function ItemCard(props) {
                     </div>
                 </div>
                 {/*
-                    <div class="card-footer">
-                        <small class="text-muted"></small>
+                    <div className="card-footer">
+                        <small className="text-muted"></small>
                     </div> 
                 */}
             </div>
