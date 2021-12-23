@@ -1,5 +1,4 @@
 import { ProgressBar, Modal } from 'react-bootstrap';
-import { useState, useEffect } from 'react';
 
 function WaitPage(props) {
     // const [progress, setProgress] = useState(10);
