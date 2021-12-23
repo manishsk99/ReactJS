@@ -15,6 +15,8 @@ function Signup() {
     let [password, setPassword] = useState("");
     let [confirm_password, setConfirm_Password] = useState("");
     let [isApiError, setIsApiError] = useState(false);
+    let [apiError, setApiError] = useState("");
+
     let [isNameInvalid, setIsNameInvalid] = useState(false);
     let [isEmailInvalid, setIsEmailInvalid] = useState(false);
     let [isPasswordInvalid, setIsPasswordInvalid] = useState(false);
@@ -65,8 +67,6 @@ function Signup() {
         let isValidationError = false;
         let v = validateField("Confirm password", value, 8, 15, false);
         setIsConfirmPasswordInvalid(false);
-        console.log(value);
-        console.log(password);
         if (v["is_invalid"] === true) {
             isValidationError = true;
             setIsConfirmPasswordInvalid(true);
@@ -100,7 +100,7 @@ function Signup() {
         setIsApiError(false);
         let data = { name, email, password, confirm_password };
         let dataJson = JSON.stringify(data);
-        console.log(dataJson);
+        // console.log(dataJson);
 
         let isValidationError = checkValues(data);
         if (isValidationError) {
@@ -115,22 +115,30 @@ function Signup() {
                 'Content-Type': 'application/json'
             },
             body: dataJson
-        }).then((result) => {
-            setWaitPageProgress(90);
-            console.log("Response Status::", result.status);
-            result.json().then((responseJSON) => {
-                console.log(responseJSON);
-                console.log(responseJSON["success"]);
-            });
-            
-            setIsDisplayWaitPage(false);
-            if (result.ok) {
-                setIsDisplaySuccessModel(true);
-            } else {
-                console.log("Error::", result.statusText);
-                setIsApiError(true);
-            }
-        });
+        }).then(res => res.json())
+            .then(
+                (responseJSON) => {
+                    setWaitPageProgress(90);
+                    setIsDisplayWaitPage(false);
+                    // console.log(responseJSON);
+                    // console.log("API Status:: " + responseJSON["success"]);
+                    if (responseJSON["success"]) {
+                        setIsDisplaySuccessModel(true);
+                    } else {
+                        setIsApiError(true);
+                        setApiError("Some error occurred.");
+                        if (responseJSON["success"] === false) {
+                            setApiError(responseJSON["message"]);
+                        }
+                    }
+                },
+                (error) => {
+                    // console.log("Error:: " + error);
+                    setIsDisplayWaitPage(false);
+                    setIsApiError(true);
+                    setApiError("Some error occurred.");
+                }
+            )
     }
 
     function sugnupDone() {
@@ -156,7 +164,7 @@ function Signup() {
                     <h1 className="card-title text-center">Signup</h1>
 
                     {isApiError ? <Alert key="danger" variant="danger">
-                        Some error occured!
+                        {apiError}
                     </Alert> : ""}
 
 
