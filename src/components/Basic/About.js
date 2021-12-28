@@ -1,5 +1,9 @@
 import {Container} from 'react-bootstrap';
+import {useEffect} from 'react';
 function About() {
+    useEffect(() => {
+        document.title = "About Us";
+      }, []);
     return (
         <Container>
             <h1>About Us</h1>

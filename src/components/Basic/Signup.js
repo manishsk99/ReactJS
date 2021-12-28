@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Alert, Modal, Button } from 'react-bootstrap';
 import { THEME_COLOR, API_BASE_URL } from './Constants';
@@ -26,6 +26,10 @@ function Signup() {
     let [passwordError, setPasswordError] = useState("");
     let [confirmPasswordError, setConfirmPasswordError] = useState("");
     let navigate = useNavigate();
+
+    useEffect(() => {
+        document.title = "Signup";
+      }, []);
 
     function formHandling(e) {
         e.preventDefault();

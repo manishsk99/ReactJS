@@ -1,6 +1,10 @@
 import { Container } from 'react-bootstrap';
-import {BRAND_NAME} from './Constants'
+import { useEffect } from 'react';
+import {BRAND_NAME} from './Constants';
 function Contact() {
+    useEffect(() => {
+        document.title = "Contact Us";
+      }, []);
     return (
         <Container>
             <div className="row p-4">

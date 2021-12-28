@@ -3,7 +3,13 @@ import { Link } from 'react-router-dom';
 import { THEME_COLOR } from './Constants';
 import { BsCartFill } from 'react-icons/bs';
 
-function Header() {
+function Header(props) {
+
+    function logout() {
+        localStorage.removeItem('is_logged_In');
+        localStorage.removeItem('user_detail');
+        props.updateLocalData(localStorage);
+    }
 
     return (
         <>
@@ -15,30 +21,31 @@ function Header() {
                     <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                     <Navbar.Collapse id="responsive-navbar-nav">
                         <Nav className="me-auto">
-                            <Nav.Link eventKey="1"><Link className="nav-link" to="/">Home</Link></Nav.Link>
-                            <Nav.Link eventKey="2"><Link className="nav-link" to="/About">About Us</Link></Nav.Link>
-                            <Nav.Link eventKey="3"><Link className="nav-link" to="/contact">Contact Us</Link></Nav.Link>
+                            <Nav.Link eventKey="1" as={Link} to="/">Home</Nav.Link>
+                            <Nav.Link eventKey="2" as={Link} to="/About">About Us</Nav.Link>
+                            <Nav.Link eventKey="3" as={Link} to="/contact">Contact Us</Nav.Link>
                         </Nav>
                         <Nav>
 
-                            <Nav.Link eventKey="4"><Link className="nav-link text-white position-relative" to="/cart">
+                            <Nav.Link eventKey="4" as={Link} className="text-white position-relative" to="/cart">
                                 <BsCartFill />
                                 <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
                                     5
                                     <span className="visually-hidden">No. of items</span>
                                 </span>
-                            </Link></Nav.Link>
+                            </Nav.Link>
 
-                            {!localStorage.getItem("is_login") ?
-                                <Nav.Link eventKey="5"><Link className="nav-link" to="/login">Login</Link></Nav.Link>
-                                :
+                            {props.localData["is_logged_In"] ?
                                 <NavDropdown title="My Account" id="collasible-nav-dropdown">
-                                    <Nav.Link eventKey="6"><Link className="dropdown-item" to="/profile">Profile</Link></Nav.Link>
-                                    <Nav.Link eventKey="7"><Link className="dropdown-item" to="/transaction">Transactions</Link></Nav.Link>
+                                    <NavDropdown.Item eventKey="6" as={Link} to="/profile">Profile</NavDropdown.Item>
+                                    <NavDropdown.Item eventKey="7" as={Link} to="/transaction">Transactions</NavDropdown.Item>
                                     <NavDropdown.Divider />
-                                    <Nav.Link eventKey="8"><Link className="dropdown-item" to="/logout">Logout</Link></Nav.Link>
+                                    <NavDropdown.Item eventKey="8" as={Link} to="/logout" onClick={logout}>Logout</NavDropdown.Item>
                                 </NavDropdown>
+                                :
+                                <Nav.Link eventKey="5" as={Link} to="/login">Login</Nav.Link>
                             }
+
                         </Nav>
                     </Navbar.Collapse>
 

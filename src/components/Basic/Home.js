@@ -1,6 +1,10 @@
 import {Container} from 'react-bootstrap';
-import {BRAND_NAME} from './Constants'
+import {useEffect} from 'react';
+import {BRAND_NAME} from './Constants';
 function Home() {
+    useEffect(() => {
+        document.title = BRAND_NAME;
+      }, []);
     return (
         <Container>
             <h1>{BRAND_NAME}</h1>

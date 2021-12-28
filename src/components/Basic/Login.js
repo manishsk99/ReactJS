@@ -1,11 +1,11 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { THEME_COLOR, API_BASE_URL } from './Constants';
 import { validateEmail, validateField } from './Basic';
-import {Alert} from 'react-bootstrap';
+import { Alert } from 'react-bootstrap';
 import WaitPage from './WaitPage';
 
-function Login() {
+function Login(props) {
     let [isDisplayWaitPage, setIsDisplayWaitPage] = useState(false);
     let [waitPageProgress, setWaitPageProgress] = useState(10);
 
@@ -20,6 +20,10 @@ function Login() {
     function formHandling(e) {
         e.preventDefault();
     }
+
+    useEffect(() => {
+        document.title = "Login";
+    }, []);
 
     function checkEmail(value) {
         let isValidationError = false;
@@ -77,8 +81,9 @@ function Login() {
                     console.log(responseJSON);
                     console.log("API Status:: " + responseJSON["success"]);
                     if (responseJSON["success"]) {
-                        localStorage.setItem('is_login', true);
+                        localStorage.setItem('is_logged_In', true);
                         localStorage.setItem('user_detail', responseJSON["data"]);
+                        props.updateLocalData(localStorage);
                         navigate("/cart");
                     } else {
                         setIsApiError(true);

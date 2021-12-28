@@ -1,3 +1,5 @@
+import {Button} from 'react-bootstrap';
+
 function ItemCard(props) {
     let item = props.itemDetail;
     return (
@@ -12,10 +14,10 @@ function ItemCard(props) {
                     </p>
                     <div className="row">
                         <div className="col-4">
-                            <a href="#" className="btn btn-outline-primary">view</a>
+                            <Button className="btn btn-outline-primary">view</Button>
                         </div>
                         <div className="col-8 text-end">
-                            <a href="#" className="btn btn-primary ">Add to cart</a>
+                            <Button className="btn btn-primary ">Add to cart</Button>
                         </div>
                     </div>
                 </div>
