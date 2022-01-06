@@ -16,6 +16,10 @@ import Footer from './components/basic/Footer';
 
 import Ecom from './components/ecom/Ecom';
 import Cart from './components/ecom/Cart';
+import MyProfile from './components/basic/MyProfile';
+import AddItem from './components/ecom/AddItem';
+import Transactions from './components/payment/Transactions';
+import AccountHome from './components/basic/AccountHome';
 
 function App() {
   let [localData, setLocalData] = useState({});
@@ -40,7 +44,7 @@ function App() {
         <div className="app-body">
 
           <Routes>
-            <Route path="/" element={<Home />} />
+            <Route path="/" element={<Ecom />} />
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/login" element={<Login updateLocalData = {updateLocalData} />} />
@@ -48,7 +52,12 @@ function App() {
             <Route path="/signup" element={<Signup />} />
             <Route path="/forgetPassword" element={<ForgetPassword />} />
 
-            <Route path="/ecom" element={<Ecom />} />
+            <Route path="/myprofile" element={<AccountHome comp={MyProfile} />} />
+            <Route path="/additem" element={<AccountHome comp = {AddItem} />} />
+
+            <Route path="/trans" element={<AccountHome comp = {Transactions} />} />
+
+            <Route path="/home" element={<Home />} />
             <Route path="/cart" element={<Cart />} />
 
             <Route path="*" element={<PageNotFound />} />

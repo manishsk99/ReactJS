@@ -6,6 +6,12 @@ import { Alert } from 'react-bootstrap';
 import WaitPage from './WaitPage';
 
 function Login(props) {
+    let redirectTo = "/myprofile";
+    // console.log("props.redirectTo:: " + props.redirectTo);
+    if(props.redirectTo) {
+        redirectTo = props.redirectTo;
+    }
+    // console.log("redirectTo:: " + redirectTo);
     let [isDisplayWaitPage, setIsDisplayWaitPage] = useState(false);
     let [waitPageProgress, setWaitPageProgress] = useState(10);
 
@@ -20,6 +26,7 @@ function Login(props) {
     function formHandling(e) {
         e.preventDefault();
     }
+
 
     useEffect(() => {
         document.title = "Login";
@@ -66,7 +73,7 @@ function Login(props) {
         }
         setIsDisplayWaitPage(true);
         setWaitPageProgress(50);
-        fetch(API_BASE_URL + "/login", {
+        fetch(API_BASE_URL + "login", {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -82,9 +89,10 @@ function Login(props) {
                     console.log("API Status:: " + responseJSON["success"]);
                     if (responseJSON["success"]) {
                         localStorage.setItem('is_logged_In', true);
-                        localStorage.setItem('user_detail', responseJSON["data"]);
+                        localStorage.setItem('name', responseJSON["data"]["name"]);
+                        localStorage.setItem('email', responseJSON["data"]["email"]);
                         props.updateLocalData(localStorage);
-                        navigate("/cart");
+                        navigate(redirectTo);
                     } else {
                         setIsApiError(true);
                         setApiError("Some error occurred.");

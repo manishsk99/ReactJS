@@ -112,7 +112,7 @@ function Signup() {
         }
         setIsDisplayWaitPage(true);
         setWaitPageProgress(50);
-        fetch(API_BASE_URL + "/signup", {
+        fetch(API_BASE_URL + "signup", {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',

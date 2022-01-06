@@ -37,10 +37,11 @@ function Header(props) {
 
                             {props.localData["is_logged_In"] ?
                                 <NavDropdown title="My Account" id="collasible-nav-dropdown">
-                                    <NavDropdown.Item eventKey="6" as={Link} to="/profile">Profile</NavDropdown.Item>
-                                    <NavDropdown.Item eventKey="7" as={Link} to="/transaction">Transactions</NavDropdown.Item>
+                                    <NavDropdown.Item eventKey="6" as={Link} to="/myprofile">Profile</NavDropdown.Item>
+                                    <NavDropdown.Item eventKey="7" as={Link} to="/additem">Add Item</NavDropdown.Item>
+                                    <NavDropdown.Item eventKey="8" as={Link} to="/trans">Transactions</NavDropdown.Item>
                                     <NavDropdown.Divider />
-                                    <NavDropdown.Item eventKey="8" as={Link} to="/logout" onClick={logout}>Logout</NavDropdown.Item>
+                                    <NavDropdown.Item eventKey="9" as={Link} to="/logout" onClick={logout}>Logout</NavDropdown.Item>
                                 </NavDropdown>
                                 :
                                 <Nav.Link eventKey="5" as={Link} to="/login">Login</Nav.Link>

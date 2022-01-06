@@ -7,11 +7,20 @@ export function validateField(fieldName, fieldValue, minlength = 2, maxlength = 
     } else if (fieldValue.length < minlength || fieldValue.length > maxlength) {
         validationOutput["is_invalid"] = true;
         validationOutput["error_message"] = fieldName + " must be between " + minlength + " to " + maxlength + " charector.";
-    } else if (isAlphaOnly && !fieldValue.match(/^[a-zA-Z]+$/)) {
+    } else if (isAlphaOnly && !fieldValue.match(/^[a-zA-Z\s]+$/)) {
         validationOutput["is_invalid"] = true;
         validationOutput["error_message"] = fieldName + " can contain letters only.";
     }
     return validationOutput;
+}
+
+export function checkField(fieldName, fieldValue, minlength = 2, maxlength = 50, isAlphaOnly = true) {
+    let isValidationError = false;
+    let v = validateField(fieldName, fieldValue, minlength, maxlength, isAlphaOnly);
+    if (v["is_invalid"] === true) {
+        isValidationError = true;
+    }
+    return isValidationError;
 }
 
 export function validateEmail(fieldValue) {
