@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Alert, Button, Modal } from "react-bootstrap";
-import { validateField } from "../basic/Basic";
+import { checkFieldValue } from "../basic/Basic";
 import { API_BASE_URL, THEME_COLOR } from "../basic/Constants";
 import WaitPage from "../basic/WaitPage";
 import AppInput from "../sub_components/AppInput";
@@ -24,12 +24,46 @@ function AddItem() {
     let [length, setLength] = useState("");
     let [width, setWidth] = useState("");
     let [height, setHeight] = useState("");
+    let [categoriesList, setCategoriesList] = useState([]);
 
     let [primaryImage, setPrimaryImage] = useState(null);
     let [primaryImageError, setPrimaryImageError] = useState("");
 
     useEffect(() => {
         document.title = "Add Item";
+        setIsApiError(false);
+
+        setIsDisplayWaitPage(true);
+        setWaitPageProgress(50);
+        fetch(API_BASE_URL + "categories").then(res => res.json())
+            .then(
+                (responseJSON) => {
+                    setWaitPageProgress(90);
+                    setIsDisplayWaitPage(false);
+                    // console.log(responseJSON);
+                    // console.log("API Status:: " + responseJSON["success"]);
+                    if (responseJSON["success"]) {
+                        // console.log("responseJSON:: " + responseJSON["data"]);
+                        setCategoriesList(responseJSON["data"]);
+                        localStorage.setItem('categories_json', JSON.stringify(responseJSON["data"]));
+                    } else {
+                        setIsApiError(true);
+                        setApiError("Some error occurred.");
+                        if (responseJSON["success"] === false) {
+                            setApiError(responseJSON["message"]);
+                        }
+                    }
+                },
+                (error) => {
+                    // console.log("Error:: " + error);
+                    setIsDisplayWaitPage(false);
+                    setIsApiError(true);
+                    setApiError("Some error occurred.");
+                    if(localStorage.getItem('items_json')) {
+                        setCategoriesList( JSON.parse(localStorage.getItem('categories_json')));
+                    }
+                }
+            )
     }, []);
 
     function formHandling(e) {
@@ -41,9 +75,9 @@ function AddItem() {
         setPrimaryImage(file);
     }
 
-    function checkField(fieldName, fieldValue, minlength = 2, maxlength = 50, isAlphaOnly = true) {
+    function checkField(fieldValueType, fieldName, fieldValue, minlength = 2, maxlength = 50, isAlphaOnly = true, isMandatory = true) {
         let isValidationError = false;
-        let v = validateField(fieldName, fieldValue, minlength, maxlength, isAlphaOnly);
+        let v = checkFieldValue(fieldValueType, fieldName, fieldValue, minlength, maxlength, isAlphaOnly, isMandatory);
         if (v["is_invalid"] === true) {
             isValidationError = true;
             setApiError(v["error_message"]);
@@ -54,22 +88,38 @@ function AddItem() {
 
     function checkValues(formData) {
         let isValidationError = false;
-        if (checkField(" Name", formData.get("name"), 2, 50, false)) {
+        if (checkField("text", " Name", formData.get("name"), 2, 50, false, true)) {
             isValidationError = true;
             return isValidationError;
         }
-        if (checkField(" Short Description", formData.get("short_description"), 2, 100, false)) {
+        if (checkField("text"," Short Description", formData.get("short_description"), 2, 100, false, true)) {
             isValidationError = true;
             return isValidationError;
         }
-        if (checkField(" Description", formData.get("description"), 2, 1000, false)) {
+        if (checkField("text", " Description", formData.get("description"), 2, 1000, false, true)) {
             isValidationError = true;
             return isValidationError;
         }
-        // if (checkField(" Category Id", formData.get("categories_id"))) {
-        //     isValidationError = true;
-        //     return isValidationError;
-        // }
+        if (checkField("select", " Category Id", formData.get("categories_id"), 1, 10, false, true)) {
+            isValidationError = true;
+            return isValidationError;
+        }
+        if (checkField("number", " MRP", formData.get("mrp"), 1, 10, false, true)) {
+            isValidationError = true;
+            return isValidationError;
+        }
+        if (checkField("number", " Selling Price", formData.get("selling_price"), 1, 10, false, true)) {
+            isValidationError = true;
+            return isValidationError;
+        }
+        if (checkField("text", " Color", formData.get("color"), 2, 50, true, true)) {
+            isValidationError = true;
+            return isValidationError;
+        }
+        if (checkField("text", " Meterial", formData.get("meterial"), 2, 50, true, true)) {
+            isValidationError = true;
+            return isValidationError;
+        }
         return isValidationError;
     }
 
@@ -112,7 +162,7 @@ function AddItem() {
                 (responseJSON) => {
                     setWaitPageProgress(90);
                     setIsDisplayWaitPage(false);
-                    // console.log(responseJSON);
+                     console.log(responseJSON);
                     // console.log("API Status:: " + responseJSON["success"]);
                     if (responseJSON["success"]) {
                         setIsDisplaySuccessModel(true);
@@ -154,21 +204,21 @@ function AddItem() {
                         {apiError}
                     </Alert> : ""}
 
-                    <AppInput type="text" name="Item Name" isMandatory="true" setFunction={setName} />
-                    <AppInput type="text" name="Short Description" isMandatory="true" setFunction={setShortDescription} />
+                    <AppInput type="text" name="Item Name" isMandatory="true" setFunction={setName} validationType = "1" />
+                    <AppInput type="text" name="Short Description" isMandatory="true" setFunction={setShortDescription}  validationType = "1" />
                     <AppInput type="textarea" name="Description" isMandatory="true" setFunction={setDescription} />
-                    <AppInput type="number" name="Category Id" setFunction={setCategoriesId} />
-                    <AppInput type="number" name="MRP" setFunction={setMrp} />
-                    <AppInput type="number" name="Selling price" setFunction={setSellingPrice} />
-                    <AppInput type="text" name="Color" setFunction={setColor} />
-                    <AppInput type="text" name="Meterial" setFunction={setMeterial} />
-                    <AppInput type="number" name="Length" setFunction={setLength} />
-                    <AppInput type="number" name="Width" setFunction={setWidth} />
-                    <AppInput type="number" name="Height" setFunction={setHeight} />
+                    <AppInput type="select" name="Category Id" isMandatory="true" setFunction={setCategoriesId} items={categoriesList} />
+                    <AppInput type="number" name="MRP" isMandatory="true" setFunction={setMrp} validationType = "1" />
+                    <AppInput type="number" name="Selling price" isMandatory="true" setFunction={setSellingPrice}  validationType = "1" />
+                    <AppInput type="text" name="Color" isMandatory="true" setFunction={setColor} validationType = "2" />
+                    <AppInput type="text" name="Meterial" isMandatory="true" setFunction={setMeterial} validationType = "2" />
+                    <AppInput type="number" name="Length" nameSuffix="(cm)" setFunction={setLength} />
+                    <AppInput type="number" name="Width" nameSuffix="(cm)" setFunction={setWidth} />
+                    <AppInput type="number" name="Height" nameSuffix="(cm)" setFunction={setHeight} />
 
-                    <label>Primary image</label>
+                    <label>Primary image (Only jpg, jpeg or png)</label>
                     <input type="file" className="form-control" name="primaryImage"
-                        onChange={(e) => selectImage(e)} />
+                        onChange={(e) => selectImage(e)} accept="image/*" />
                     {primaryImageError !== "" ? <><span className="text-danger"> {primaryImageError} </span><br /></> : ""}
                     <br />
 

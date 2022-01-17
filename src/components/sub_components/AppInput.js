@@ -1,35 +1,55 @@
 import { useEffect, useState } from "react";
-import { validateField } from "../basic/Basic";
+import { checkFieldValue } from "../basic/Basic";
 
 function AppInput(props) {
     let [field, setField] = useState("");
     let [fieldError, setFieldError] = useState("");
     let [isFieldInvalid, setIsFieldInvalid] = useState("");
-    
+    let [nameSuffix, setNameSuffix] = useState("");
+
     let [minLength, setMinLength] = useState(0);
     let [maxLength, setMaxLength] = useState(0);
     let [isAlphaOnly, setIsAlphaOnly] = useState(false);
+    let [isValidate, setIsValidate] = useState(false);
+    let [isMandatory, setIsMandatory] = useState(false);
 
-    useEffect (() =>{
+    useEffect(() => {
+
         setMinLength(2);
         setMaxLength(50);
-        setIsAlphaOnly(true);
+        setIsAlphaOnly(false);
+        if (props.isMandatory) {
+            setIsMandatory(true);
+            setIsValidate(true);
+        } else {
+            setMinLength(0);
+        }
         if (props.validationType === "1") {
+            setIsValidate(true);
+        } else if (props.validationType === "2") {
+            setIsAlphaOnly(true);
+            setIsValidate(true);
+        } else if (props.validationType === "3") {
             setMaxLength(20);
-            setIsAlphaOnly(false);
+            setIsAlphaOnly(true);
+            setIsValidate(true);
         } else if (props.type === "textarea") {
             setMaxLength(1000);
-            setIsAlphaOnly(false);
         } else if (props.type === "number") {
             setMaxLength(10);
-            setIsAlphaOnly(false);
+        } else if (props.type === "select") {
+            setMinLength(0);
+            setMaxLength(10);
         }
-    },[props]);
+        if (props.nameSuffix) {
+            setNameSuffix(props.nameSuffix);
+        }
+    }, [props]);
 
     function checkField(value) {
         let isValidationError = false;
-        if (props.isMandatory) {
-            let v = validateField(" " + props.name, value, minLength, maxLength, isAlphaOnly);
+        if (isValidate) {
+            let v = checkFieldValue(props.type, " " + props.name, value, minLength, maxLength, isAlphaOnly, isMandatory);
             setIsFieldInvalid(false);
             if (v["is_invalid"] === true) {
                 isValidationError = true;
@@ -42,6 +62,7 @@ function AppInput(props) {
 
     function setFieldValue(e) {
         setField(e.target.value);
+        // console.log("value:" + e.target.value );
         props.setFunction(e.target.value);
     }
 
@@ -53,14 +74,29 @@ function AppInput(props) {
                         id={props.name} value={field} onChange={setFieldValue}
                         onBlur={(e) => checkField(e.target.value)} style={{ height: '100px' }} />
                     :
-                    <input type={props.type} className="form-control" placeholder={props.name + (props.isMandatory ? "*" : "")}
-                        id={props.name} value={field} onChange={setFieldValue}
-                        onBlur={(e) => checkField(e.target.value)} 
-                        min={props.type === "number" ? "0" : ""}
-                        maxLength={maxLength}
+                    props.type === "number" ?
+                        <input type={props.type} className="form-control" placeholder={props.name + (props.isMandatory ? "*" : "")}
+                            id={props.name} value={field} onChange={setFieldValue}
+                            onBlur={(e) => checkField(e.target.value)}
+                            min={props.type === "number" ? "0" : ""}
+                            max={(10 ** (maxLength - 1)) - 1}
                         />
+                        :
+                        props.type === "select" ?
+                            <select className="form-select" onChange={setFieldValue} 
+                            onBlur={(e) => checkField(e.target.value)} >
+                                {props.items.map((item, key) => 
+                                    <option key={key} value={item.id}>{item.name}</option>
+                                )}
+                            </select>
+                            :
+                            <input type={props.type} className="form-control" placeholder={props.name + (props.isMandatory ? "*" : "")}
+                                id={props.name} value={field} onChange={setFieldValue}
+                                onBlur={(e) => checkField(e.target.value)}
+                                maxLength={maxLength}
+                            />
                 }
-                <label className="text-muted" htmlFor={props.name}>{props.name + (props.isMandatory ? "*" : "")}</label>
+                <label className="text-muted" htmlFor={props.name}>{props.name + nameSuffix + (props.isMandatory ? "*" : "")}</label>
                 {isFieldInvalid ? <span className="text-danger"> {fieldError} </span> : ""}
             </div>
         </>
