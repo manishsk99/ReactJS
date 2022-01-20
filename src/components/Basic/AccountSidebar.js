@@ -13,6 +13,9 @@ function AccountSidebar() {
             <ListGroup.Item action as={Link} to="/trans" href="#link3">
                 Transactions
             </ListGroup.Item>
+            <ListGroup.Item action as={Link} to="/logout" href="#link4">
+                Logout
+            </ListGroup.Item>
         </ListGroup>
     );
 }

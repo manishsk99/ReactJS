@@ -1,6 +1,8 @@
-function CartSummary() {
+
+function CartSummary({cartSummary}) {
     return (
-        <div className="card mt-4 bg-white shadow">
+        <div className="pt-5  sticky-top">
+        <div className="card mt-3 bg-white shadow">
         <table className="table">
             <thead>
                 <tr>
@@ -10,24 +12,25 @@ function CartSummary() {
             <tbody>
                 <tr>
                     <td>Price</td>
-                    <td className="text-end">&#x20B9; 1000.00</td>
+                    <td className="text-end">&#x20B9; {cartSummary.itemTotalPrice}</td>
                 </tr>
                 <tr>
                     <td>Discount</td>
-                    <td className="text-end">&#x20B9; 100.00</td>
+                    <td className="text-end">&#x20B9; {cartSummary.discountAmount}</td>
                 </tr>
                 <tr>
                     <td>Delivery Charges</td>
-                    <td className="text-end">&#x20B9; 40.00</td>
+                    <td className="text-end">&#x20B9; {cartSummary.deliveryCharges}</td>
                 </tr>
             </tbody>
             <thead>
                 <tr>
                     <th scope="col">Total</th>
-                    <th className="text-end">&#x20B9; 940.00</th>
+                    <th className="text-end">&#x20B9; {cartSummary.totalAmount}</th>
                 </tr>
             </thead>
         </table>
+        </div>
         </div>
     )
 }

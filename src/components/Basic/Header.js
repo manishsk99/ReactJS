@@ -4,7 +4,6 @@ import { THEME_COLOR } from './Constants';
 import { BsCartFill } from 'react-icons/bs';
 
 function Header(props) {
-
     function logout() {
         localStorage.removeItem('is_logged_In');
         localStorage.removeItem('user_detail');
@@ -13,7 +12,7 @@ function Header(props) {
 
     return (
         <>
-            <Navbar collapseOnSelect expand="sm" bg={THEME_COLOR} variant="dark">
+            <Navbar collapseOnSelect expand="sm" bg={THEME_COLOR} variant="dark" className='sticky-top'>
                 <Container>
 
                     {/* <Link className="navbar-brand" to="/"><img src="././epur_big_logo.png" width="100" height="30" className="d-inline-block align-top" alt="e-PUR"/></Link>  */}
@@ -30,7 +29,7 @@ function Header(props) {
                             <Nav.Link eventKey="4" as={Link} className="text-white position-relative" to="/cart">
                                 <BsCartFill />
                                 <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                                    5
+                                    {props.cartItemCount}
                                     <span className="visually-hidden">No. of items</span>
                                 </span>
                             </Nav.Link>

@@ -1,8 +1,11 @@
+
+import { API_BASE_URL } from "../basic/Constants";
+
 export function validateField(fieldName, fieldValue, minlength = 2, maxlength = 50, isAlphaOnly = true, isMandatory = true) {
     let validationOutput = {};
     validationOutput["is_invalid"] = false;
     // console.log('fieldValue::' + fieldValue.length);
-    var fieldValue1 = fieldValue.replace(/(\r\n|\n|\r)/g,"  ");
+    var fieldValue1 = fieldValue.replace(/(\r\n|\n|\r)/g, "  ");
     // console.log('fieldValue1::' + fieldValue1.length);
     if (isMandatory && fieldValue === "") {
         validationOutput["is_invalid"] = true;
@@ -80,35 +83,41 @@ export function validateSelect(fieldName, fieldValue, isMandatory) {
     validationOutput["is_invalid"] = false;
     if (isMandatory && fieldValue === "0") {
         validationOutput["is_invalid"] = true;
-        validationOutput["error_message"] = "Please select a valid option for "+ fieldName +".";
+        validationOutput["error_message"] = "Please select a valid option for " + fieldName + ".";
     }
     return validationOutput;
 }
 
-// export async function apiCall(url, method, jsonData) {
-//     let apiResponse = {};
-//     fetch(url, {
-//         method: method,
-//         headers: {
-//             'Accept': 'application/json',
-//             'Content-Type': 'application/json'
-//         },
-//         body: jsonData
-//     }).then((result) => {
-//         console.log("Response Status::", result.status);
-//         apiResponse["status"] = result.status;
-//         result.json().then((responseJSON) => {
-//             console.log(responseJSON);
-//             console.log(responseJSON["success"]);
-//             apiResponse["data"] = responseJSON;
-//         });
-//         if (result.ok) {
-//             apiResponse["is_success"] = true;
-//         } else {
-//             console.log("Error::", result.statusText);
-//             apiResponse["error_message"] = result.statusText;
-//             apiResponse["is_success"] = false;
-//         }
-//     });
-//     return apiResponse;
-// }
+export async function apiGetCall(subUrl, setterFunction, isSaveInLS, lsName) {
+    let apiResponse = {};
+    apiResponse["is_api_error"] = false;
+    await fetch(API_BASE_URL + subUrl).then(res => res.json())
+        .then(
+            (responseJSON) => {
+                console.log("API call back");
+                // console.log("API Status:: " + JSON.stringify(responseJSON["data"]));
+                if (responseJSON["success"]) {
+                    setterFunction(responseJSON["data"]);
+                    apiResponse["data"] = responseJSON["data"];
+                    if(isSaveInLS === true) {
+                        localStorage.setItem(lsName, JSON.stringify(responseJSON["data"]));
+                    }                    
+                } else {
+                    apiResponse["is_api_error"] = true;
+                    apiResponse["api_error"] = "Some error occurred.";
+                    if (responseJSON["success"] === false) {
+                        apiResponse["api_error"] = responseJSON["message"];
+                    }
+                }
+            },
+            (error) => {
+                apiResponse["is_api_error"] = true;
+                apiResponse["api_error"] = "Some error occurred.";
+                if (localStorage.getItem(lsName)) {
+                    apiResponse["api_error"] = JSON.parse(localStorage.getItem(lsName));
+                }
+                // console.log("Error:: " + error);
+            }
+        );
+    return apiResponse;
+}

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Alert, Button, Modal } from "react-bootstrap";
-import { checkFieldValue } from "../basic/Basic";
+import { checkFieldValue, apiGetCall } from "../basic/Basic";
 import { API_BASE_URL, THEME_COLOR } from "../basic/Constants";
 import WaitPage from "../basic/WaitPage";
 import AppInput from "../sub_components/AppInput";
@@ -35,35 +35,13 @@ function AddItem() {
 
         setIsDisplayWaitPage(true);
         setWaitPageProgress(50);
-        fetch(API_BASE_URL + "categories").then(res => res.json())
-            .then(
-                (responseJSON) => {
-                    setWaitPageProgress(90);
-                    setIsDisplayWaitPage(false);
-                    // console.log(responseJSON);
-                    // console.log("API Status:: " + responseJSON["success"]);
-                    if (responseJSON["success"]) {
-                        // console.log("responseJSON:: " + responseJSON["data"]);
-                        setCategoriesList(responseJSON["data"]);
-                        localStorage.setItem('categories_json', JSON.stringify(responseJSON["data"]));
-                    } else {
-                        setIsApiError(true);
-                        setApiError("Some error occurred.");
-                        if (responseJSON["success"] === false) {
-                            setApiError(responseJSON["message"]);
-                        }
-                    }
-                },
-                (error) => {
-                    // console.log("Error:: " + error);
-                    setIsDisplayWaitPage(false);
-                    setIsApiError(true);
-                    setApiError("Some error occurred.");
-                    if(localStorage.getItem('items_json')) {
-                        setCategoriesList( JSON.parse(localStorage.getItem('categories_json')));
-                    }
-                }
-            )
+        Promise.all([
+            apiGetCall("categories", setCategoriesList, true, "categories_json")
+        ]).then(
+            () => {
+                setIsDisplayWaitPage(false);
+            }
+        );
     }, []);
 
     function formHandling(e) {
@@ -92,7 +70,7 @@ function AddItem() {
             isValidationError = true;
             return isValidationError;
         }
-        if (checkField("text"," Short Description", formData.get("short_description"), 2, 100, false, true)) {
+        if (checkField("text", " Short Description", formData.get("short_description"), 2, 100, false, true)) {
             isValidationError = true;
             return isValidationError;
         }
@@ -162,7 +140,7 @@ function AddItem() {
                 (responseJSON) => {
                     setWaitPageProgress(90);
                     setIsDisplayWaitPage(false);
-                     console.log(responseJSON);
+                    console.log(responseJSON);
                     // console.log("API Status:: " + responseJSON["success"]);
                     if (responseJSON["success"]) {
                         setIsDisplaySuccessModel(true);
@@ -204,14 +182,14 @@ function AddItem() {
                         {apiError}
                     </Alert> : ""}
 
-                    <AppInput type="text" name="Item Name" isMandatory="true" setFunction={setName} validationType = "1" />
-                    <AppInput type="text" name="Short Description" isMandatory="true" setFunction={setShortDescription}  validationType = "1" />
+                    <AppInput type="text" name="Item Name" isMandatory="true" setFunction={setName} validationType="1" />
+                    <AppInput type="text" name="Short Description" isMandatory="true" setFunction={setShortDescription} validationType="1" />
                     <AppInput type="textarea" name="Description" isMandatory="true" setFunction={setDescription} />
                     <AppInput type="select" name="Category Id" isMandatory="true" setFunction={setCategoriesId} items={categoriesList} />
-                    <AppInput type="number" name="MRP" isMandatory="true" setFunction={setMrp} validationType = "1" />
-                    <AppInput type="number" name="Selling price" isMandatory="true" setFunction={setSellingPrice}  validationType = "1" />
-                    <AppInput type="text" name="Color" isMandatory="true" setFunction={setColor} validationType = "2" />
-                    <AppInput type="text" name="Meterial" isMandatory="true" setFunction={setMeterial} validationType = "2" />
+                    <AppInput type="number" name="MRP" isMandatory="true" setFunction={setMrp} validationType="1" />
+                    <AppInput type="number" name="Selling price" isMandatory="true" setFunction={setSellingPrice} validationType="1" />
+                    <AppInput type="text" name="Color" isMandatory="true" setFunction={setColor} validationType="2" />
+                    <AppInput type="text" name="Meterial" isMandatory="true" setFunction={setMeterial} validationType="2" />
                     <AppInput type="number" name="Length" nameSuffix="(cm)" setFunction={setLength} />
                     <AppInput type="number" name="Width" nameSuffix="(cm)" setFunction={setWidth} />
                     <AppInput type="number" name="Height" nameSuffix="(cm)" setFunction={setHeight} />
