@@ -19,10 +19,12 @@ import Ecom from './components/ecom/Ecom';
 import Cart from './components/ecom/Cart';
 import MyProfile from './components/basic/MyProfile';
 import AddItem from './components/ecom/AddItem';
+import AddAddress from './components/ecom/AddAddress';
 import Transactions from './components/payment/Transactions';
 import AccountHome from './components/basic/AccountHome';
 import ItemDetail from './components/ecom/ItemDetail';
 import { ToastContainer } from 'react-toastify';
+import ManageAddress from './components/ecom/ManageAddress';
 
 export const HeaderContext = createContext();
 
@@ -70,6 +72,8 @@ function App() {
 
             <Route path="/myprofile" element={<AccountHome comp={MyProfile} />} />
             <Route path="/additem" element={<AccountHome comp={AddItem} />} />
+            <Route path="/addaddress" element={<AccountHome comp={AddAddress} />} />
+            <Route path="/manageaddress" element={<AccountHome comp={ManageAddress} />} />
 
             <Route path="/trans" element={<AccountHome comp={Transactions} />} />
 

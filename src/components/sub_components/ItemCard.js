@@ -2,14 +2,14 @@ import { Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { IMAGE_BASE_URL } from '../basic/Constants';
 import { addToCart } from '../ecom/Cart';
-import {HeaderContext} from '../../App.js';
-import { useContext } from 'react';
+import { HeaderContext } from '../../App.js';
+import { useContext, useEffect, useState } from 'react';
 
 function ItemCard(props) {
     const updateCartItemCount = useContext(HeaderContext);
     let item = props.itemDetail;
 
-    function addToCartOpration () {
+    function addToCartOpration() {
         addToCart(item);
         updateCartItemCount();
     }
@@ -22,8 +22,7 @@ function ItemCard(props) {
                     <h5 className="card-title">{item.name}</h5>
                     <p className="card-text">
                         Item short description. <br />
-                        <span><strong>&#x20B9; {item.mrp}</strong>
-                            <strike className="text-muted">&#x20B9; {item.selling_price}</strike></span>
+                        <ItemPriceDetail mrp={item.mrp} selling_price={item.selling_price} isCard={true} />
                     </p>
                     <div className="row">
                         <div className="col-4">
@@ -45,3 +44,21 @@ function ItemCard(props) {
 }
 
 export default ItemCard;
+
+export function ItemPriceDetail(props) {
+    let [percent, setPersent] = useState(0);
+
+    useEffect(() => {
+        setPersent(Math.round(((props.mrp - props.selling_price) / props.mrp) * 100));
+    }, [props]);
+
+    return (
+        <>
+            <span>
+                <strong className={props.isCard === true ? "" : "fs-4"}>&#x20B9; {props.mrp}</strong>&nbsp;
+                <strike className="text-muted">&#x20B9; {props.selling_price}</strike>&nbsp;
+                {percent > 1 ? <strong className="text-success">{percent}% off</strong> : ""}
+            </span>
+        </>
+    )
+}

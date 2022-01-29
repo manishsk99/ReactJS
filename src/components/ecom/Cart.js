@@ -4,6 +4,7 @@ import { Container } from 'react-bootstrap';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
+import { THEME_COLOR } from '../basic/Constants';
 
 function Cart(props) {
     const [cartItems, setCartItems] = useState([]);
@@ -49,32 +50,44 @@ function Cart(props) {
     }
 
     return (
-        <div className="bg-light">
+        <div className="bg-light h-100">
             <Container>
+
                 <div className="mb-3">
-                    <div className="row">
-                        {cartItems.length === 0 ?
-                            <div className="row justify-content-center p-4">
-                                <div className="card col-sm-8 col-lg-4 p-4">
-                                    <span>No item added in cart <Link to="/">Continue shopping</Link></span>
-                                </div>
+
+                    {cartItems.length === 0 ?
+                        <div className="row justify-content-center p-4">
+                            <div className="card col-sm-8 col-lg-4 p-4">
+                                <span>No item added in cart <Link to="/">Continue shopping</Link></span>
                             </div>
-                            :
-                            <>
+                        </div>
+                        :
+                        <>
+                            <div className="row">
                                 <div className="col-sm-8 pt-5">
-                                    {
-                                        cartItems.map((item, key) =>
-                                            <CartItem key={key} itemDetail={item} removeFunction={removeItemFromCartOpration} />
-                                        )
-                                    }
+                                    <div><PinCodeBox /></div>
+                                    <div>
+                                        {
+                                            cartItems.map((item, key) =>
+                                                <CartItem key={key} itemDetail={item} removeFunction={removeItemFromCartOpration} />
+                                            )
+                                        }
+                                    </div>
+                                    <div className="row mt-4">
+                                        <div className="col-sm-6"></div>
+                                        <div className="col-sm-6">
+                                            <button className={"form-control form-control-lg btn btn-" + THEME_COLOR} type="button">Continue</button>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div className="col-sm-4">
                                     <CartSummery cartSummary={cartSummary} />
                                 </div>
-                            </>
-                        }
+                            </div>
 
-                    </div>
+                        </>
+                    }
+
                 </div>
             </Container>
         </div>
@@ -122,3 +135,19 @@ function removeItemFromCart(itemIdToDelete) {
         localStorage.setItem("cart_items_count", cartItemsLS.length);
     }
 }
+
+function PinCodeBox() {
+    return (
+        <div className="row">
+            <div className="col-sm-6"></div>
+            <div className="col-sm-6">
+                <div className="input-group mb-3">
+                    <input type="text" className="form-control" placeholder="Pin Code" maxLength={6} />
+                    <button className="btn btn-outline-secondary" type="button">check</button>
+                </div>
+            </div>
+        </div>
+    );
+}
+
+export { PinCodeBox };

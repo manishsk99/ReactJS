@@ -31,8 +31,8 @@ function AddItem() {
 
     useEffect(() => {
         document.title = "Add Item";
+        
         setIsApiError(false);
-
         setIsDisplayWaitPage(true);
         setWaitPageProgress(50);
         Promise.all([

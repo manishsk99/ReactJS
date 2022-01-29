@@ -22,6 +22,12 @@
     border-color: #0d6efd;
 }
 
+.btn-theme:focus {
+  color: #fff;
+  background-color: #0a58ca;
+  border-color: #0a58ca;
+}
+
 .nav-link {
     padding-top: 0.25rem !important;
     padding-bottom: 0.25rem !important;

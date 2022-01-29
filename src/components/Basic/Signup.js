@@ -145,7 +145,7 @@ function Signup() {
             )
     }
 
-    function sugnupDone() {
+    function signupDone() {
         setIsDisplaySuccessModel(false);
         navigate("/login");
     }
@@ -161,7 +161,7 @@ function Signup() {
                             <p className='text-success'> Signup Successfull. </p>
                         </Modal.Body>
                         <Modal.Footer>
-                            <Button onClick={sugnupDone} className={`btn btn-${THEME_COLOR}`} >Login</Button>
+                            <Button onClick={signupDone} className={`btn btn-${THEME_COLOR}`} >Login</Button>
                         </Modal.Footer>
                     </Modal>
 
