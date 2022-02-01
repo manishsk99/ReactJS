@@ -18,8 +18,10 @@ function getIfValueExist(validationRule, valueToFind) {
     if (validationRule.indexOf(valueToFind) >= 0) {
         let beginInd = validationRule.indexOf(valueToFind);
         let endInd = validationRule.indexOf("|", beginInd);
-        value = validationRule.slice(beginInd + 1, endInd);
+        // console.log("beginInd::" + beginInd + "," + endInd);
+        value = validationRule.slice(beginInd + valueToFind.length + 1, endInd);
     }
+    // console.log("value::" + value);
     return value;
 }
 
@@ -93,6 +95,9 @@ export function validateInputValue(fieldValueType, fieldName, fieldValue, valida
     if (isMandatory && fieldValue === "") {
         validationOutput["is_invalid"] = true;
         validationOutput["error_message"] = fieldName + " can not be empty.";
+    } else if (isMandatory && fieldValueType === "select" && (fieldValue === "0" || fieldValue === 0)) {
+        validationOutput["is_invalid"] = true;
+        validationOutput["error_message"] = fieldName + " need to be selected.";
     } else if (fieldValue !== "") {
         if (fieldValue.length < minlength || fieldValue1.length > maxlength) {
             validationOutput["is_invalid"] = true;

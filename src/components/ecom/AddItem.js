@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Alert, Button, Modal } from "react-bootstrap";
-import { checkFieldValue, apiGetCall } from "../basic/Basic";
+import { validateInputValue, apiGetCall } from "../basic/Basic";
 import { API_BASE_URL, THEME_COLOR } from "../basic/Constants";
 import WaitPage from "../basic/WaitPage";
 import AppInput from "../sub_components/AppInput";
@@ -29,9 +29,24 @@ function AddItem() {
     let [primaryImage, setPrimaryImage] = useState(null);
     let [primaryImageError, setPrimaryImageError] = useState("");
 
+    let [inputProps] = useState({
+        name: { type: "text", name: "Item Name", rule: "required", setFunction: setName },
+        short_description: { type: "text", name: "Short Description", rule: "required", setFunction: setShortDescription },
+        description: { type: "textarea", name: "Description", rule: "required|min:2|max:1000", setFunction: setDescription },
+        categories_id: { type: "select", name: "Category", rule: "required", setFunction: setCategoriesId, items: categoriesList },
+        mrp: { type: "number", name: "MRP", rule: "required|numberOnly", setFunction: setMrp },
+        selling_price: { type: "number", name: "Selling price", rule: "required|numberOnly", setFunction: setSellingPrice },
+        color: { type: "text", name: "Color", rule: "required", setFunction: setColor },
+        meterial: { type: "text", name: "Meterial", rule: "required", setFunction: setMeterial },
+        length: { type: "text", name: "Length", setFunction: setLength, nameSuffix: "(cm)" },
+        width: { type: "text", name: "Width", setFunction: setWidth, nameSuffix: "(cm)" },
+        height: { type: "text", name: "Height", setFunction: setHeight, nameSuffix: "(cm)" }
+    });
+    let [title, setTitle] = useState("Add Item");
+
     useEffect(() => {
         document.title = "Add Item";
-        
+        setTitle("Add Item");
         setIsApiError(false);
         setIsDisplayWaitPage(true);
         setWaitPageProgress(50);
@@ -53,54 +68,20 @@ function AddItem() {
         setPrimaryImage(file);
     }
 
-    function checkField(fieldValueType, fieldName, fieldValue, minlength = 2, maxlength = 50, isAlphaOnly = true, isMandatory = true) {
-        let isValidationError = false;
-        let v = checkFieldValue(fieldValueType, fieldName, fieldValue, minlength, maxlength, isAlphaOnly, isMandatory);
-        if (v["is_invalid"] === true) {
-            isValidationError = true;
-            setApiError(v["error_message"]);
-            return isValidationError;
-        }
-        return isValidationError;
-    }
-
     function checkValues(formData) {
         let isValidationError = false;
-        if (checkField("text", " Name", formData.get("name"), 2, 50, false, true)) {
-            isValidationError = true;
-            return isValidationError;
-        }
-        if (checkField("text", " Short Description", formData.get("short_description"), 2, 100, false, true)) {
-            isValidationError = true;
-            return isValidationError;
-        }
-        if (checkField("text", " Description", formData.get("description"), 2, 1000, false, true)) {
-            isValidationError = true;
-            return isValidationError;
-        }
-        if (checkField("select", " Category Id", formData.get("categories_id"), 1, 10, false, true)) {
-            isValidationError = true;
-            return isValidationError;
-        }
-        if (checkField("number", " MRP", formData.get("mrp"), 1, 10, false, true)) {
-            isValidationError = true;
-            return isValidationError;
-        }
-        if (checkField("number", " Selling Price", formData.get("selling_price"), 1, 10, false, true)) {
-            isValidationError = true;
-            return isValidationError;
-        }
-        if (checkField("text", " Color", formData.get("color"), 2, 50, true, true)) {
-            isValidationError = true;
-            return isValidationError;
-        }
-        if (checkField("text", " Meterial", formData.get("meterial"), 2, 50, true, true)) {
-            isValidationError = true;
-            return isValidationError;
+        for (let key in inputProps) {
+            let value = inputProps[key];
+            // console.log("key:" + key + "," + value);
+            let v = validateInputValue(value.type, value.name, formData.get(key), value.rule);
+            if (v["is_invalid"] === true) {
+                isValidationError = true;
+                setApiError(v["error_message"]);
+                return isValidationError;
+            }
         }
         return isValidationError;
     }
-
 
     function addItem() {
         let formData = new FormData();
@@ -169,30 +150,42 @@ function AddItem() {
 
                     <Modal show={isDisplaySuccessModel} aria-labelledby="contained-modal-title-vcenter" centered >
                         <Modal.Body>
-                            <p className='text-success'> Add item Successfull. </p>
+                            <p className='text-success'> {title} Successfull. </p>
                         </Modal.Body>
                         <Modal.Footer>
                             <Button onClick={() => setIsDisplaySuccessModel(false)} className={`btn btn-${THEME_COLOR}`} >Close</Button>
                         </Modal.Footer>
                     </Modal>
 
-                    <h1 className="card-title text-center">Add item</h1>
+                    <h1 className="card-title text-center">{title}</h1>
 
                     {isApiError ? <Alert key="danger" variant="danger">
                         {apiError}
                     </Alert> : ""}
 
-                    <AppInput type="text" name="Item Name" isMandatory="true" setFunction={setName} validationType="1" />
-                    <AppInput type="text" name="Short Description" isMandatory="true" setFunction={setShortDescription} validationType="1" />
-                    <AppInput type="textarea" name="Description" isMandatory="true" setFunction={setDescription} />
-                    <AppInput type="select" name="Category Id" isMandatory="true" setFunction={setCategoriesId} items={categoriesList} />
-                    <AppInput type="number" name="MRP" isMandatory="true" setFunction={setMrp} validationType="1" />
-                    <AppInput type="number" name="Selling price" isMandatory="true" setFunction={setSellingPrice} validationType="1" />
-                    <AppInput type="text" name="Color" isMandatory="true" setFunction={setColor} validationType="2" />
-                    <AppInput type="text" name="Meterial" isMandatory="true" setFunction={setMeterial} validationType="2" />
-                    <AppInput type="number" name="Length" nameSuffix="(cm)" setFunction={setLength} />
-                    <AppInput type="number" name="Width" nameSuffix="(cm)" setFunction={setWidth} />
-                    <AppInput type="number" name="Height" nameSuffix="(cm)" setFunction={setHeight} />
+                    {Object.keys(inputProps).map((field, key) =>
+                        field === "categories_id" ?
+                            <AppInput key={key}
+                                type={inputProps[field].type}
+                                name={inputProps[field].name}
+                                setFunction={inputProps[field].setFunction}
+                                validationRule={inputProps[field].rule}
+                                items={categoriesList}
+                                nameSuffix={inputProps[field].nameSuffix}
+                            // defaultValue={isEditAddress ? addressDetail[field] : ""}
+                            />
+                            :
+                            <AppInput key={key}
+                                type={inputProps[field].type}
+                                name={inputProps[field].name}
+                                setFunction={inputProps[field].setFunction}
+                                validationRule={inputProps[field].rule}
+                                //   items={inputProps[field].items}
+                                nameSuffix={inputProps[field].nameSuffix}
+                            // defaultValue={isEditAddress ? addressDetail[field] : ""}
+                            />
+                    )
+                    }
 
                     <label>Primary image (Only jpg, jpeg or png)</label>
                     <input type="file" className="form-control" name="primaryImage"
@@ -202,7 +195,7 @@ function AddItem() {
 
 
                     <input className={`form-control btn btn-${THEME_COLOR}`} type="submit"
-                        onClick={addItem} value="Save Item" />
+                        onClick={addItem} value={title} />
                     <br />
 
                 </form>

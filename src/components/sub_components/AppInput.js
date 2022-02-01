@@ -80,7 +80,8 @@ function AppInput(props) {
                                             <div className="form-check form-check-inline ms-2" key={key}>
                                                 {item.id === field ?
                                                     <input key={key} className="form-check-input" type="radio" name="iro" id={item.id}
-                                                        value={item.id} onChange={setFieldValue} checked={item.id === field} />
+                                                        value={item.id} onChange={setFieldValue} checked="checked" />
+                                                    //checked is causing error: Warning: A component is changing an uncontrolled input to be controlled
                                                     :
                                                     <input key={key} className="form-check-input" type="radio" name="iro" id={item.id}
                                                         value={item.id} onChange={setFieldValue} />
