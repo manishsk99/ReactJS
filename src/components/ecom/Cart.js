@@ -48,6 +48,7 @@ function Cart(props) {
             setCartSummary(cartSummary);
         }
     }
+    
 
     return (
         <div className="bg-light h-100">
@@ -76,7 +77,7 @@ function Cart(props) {
                                     <div className="row mt-4">
                                         <div className="col-sm-6"></div>
                                         <div className="col-sm-6">
-                                            <button className={"form-control form-control-lg btn btn-" + THEME_COLOR} type="button">Continue</button>
+                                            <Link className={"form-control form-control-lg btn btn-" + THEME_COLOR} to="/selectaddress" >Continue</Link>
                                         </div>
                                     </div>
                                 </div>

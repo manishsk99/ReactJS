@@ -7,9 +7,10 @@ import { ADDRESS_TYPE_LIST, STATE_LIST } from "../basic/StaticData";
 import WaitPage from "../basic/WaitPage";
 import AppInput from "../sub_components/AppInput";
 
-function AddAddress(props) {
+function AddAddress() {
     const location = useLocation();
-    const { addressDetail } = location.state;
+    const { addressDetail, returnTo } = location.state;
+    // console.log("returnTo: " + returnTo)
 
     let [isDisplayWaitPage, setIsDisplayWaitPage] = useState(false);
     let [waitPageProgress, setWaitPageProgress] = useState(10);
@@ -142,8 +143,8 @@ function AddAddress(props) {
 
     function addressAddDone() {
         setIsDisplaySuccessModel(false);
-        if (props.returnTo) {
-            navigate(props.returnTo);
+        if (returnTo) {
+            navigate(returnTo);
         } else {
             navigate("/manageaddress");
         }
@@ -160,7 +161,7 @@ function AddAddress(props) {
                             <p className='text-success'> {title} Successfull. </p>
                         </Modal.Body>
                         <Modal.Footer>
-                            <Button onClick={() => addressAddDone(false)} className={`btn btn-${THEME_COLOR}`} >Close</Button>
+                            <Button onClick={() => addressAddDone()} className={`btn btn-${THEME_COLOR}`} >Close</Button>
                         </Modal.Footer>
                     </Modal>
 
@@ -183,8 +184,15 @@ function AddAddress(props) {
                         )
                     }
 
-                    <input className={`form-control btn btn-${THEME_COLOR}`} type="submit"
-                        onClick={addItem} value={title} />
+                    <div className="row mt-3">
+                        <div className="col-6">
+                            <button type="button" className="btn btn-link" onClick={addressAddDone}>Cancel</button>
+                        </div>
+                        <div className="col-6">
+                            <input className={`form-control btn btn-${THEME_COLOR}`} type="submit"
+                                onClick={addItem} value={title} />
+                        </div>
+                    </div>
                     <br />
 
                 </form>

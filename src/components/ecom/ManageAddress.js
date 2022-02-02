@@ -30,7 +30,7 @@ function ManageAddress(props) {
                                             <div>
                                                 <strong>{address.name} </strong>
                                                 <span className="badge bg-secondary">{address.type === 1 ? "Home" : "Work"}</span>&nbsp;
-                                                <Link to="/addaddress" state={{ addressDetail: address }} >Edit</Link>
+                                                <Link to="/addaddress" state={{ addressDetail: address, returnTo:props.returnTo }} >Edit</Link>
                                                 <p>{address.address1}, {address.address2 ? address.address2 + "," : ""} {address.landmark} <br />
                                                     {address.city}, {address.state} - {address.pin_code} <br />
                                                     Phone : {address.phone}
@@ -43,7 +43,7 @@ function ManageAddress(props) {
                             )
                     }
 
-                    <Link to="/addaddress" state={{}}>Add New Address</Link>
+                    <Link to="/addaddress" state={{returnTo:props.returnTo}}>Add New Address</Link>
                     <hr />
                 </div>
             </div>
