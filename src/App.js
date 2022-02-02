@@ -59,11 +59,6 @@ function App() {
         <div className="app-body">
 
           <Routes>
-            <Route path="/" element={
-              <HeaderContext.Provider value={updateCartItemCount}>
-                <Ecom />
-              </HeaderContext.Provider>
-            } />
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/login" element={<Login updateLocalData={updateLocalData} />} />
@@ -79,8 +74,9 @@ function App() {
             <Route path="/trans" element={<AccountHome comp={Transactions} />} />
 
             <Route path="/home" element={<Home />} />
-            <Route path="/itemDetail/:id" element={<ItemDetail />} />
-            <Route path="/cart" element={<Cart updateCartItemCount={updateCartItemCount}/>} />
+            <Route path="/" element={<HeaderContext.Provider value={updateCartItemCount}><Ecom /></HeaderContext.Provider>} />
+            <Route path="/itemDetail/:itemId" element={<HeaderContext.Provider value={updateCartItemCount}><ItemDetail /></HeaderContext.Provider>} />
+            <Route path="/cart" element={<Cart updateCartItemCount={updateCartItemCount} />} />
             <Route path="/selectaddress" element={<SelectAddress />} />
 
             <Route path="*" element={<PageNotFound />} />
