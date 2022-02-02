@@ -48,7 +48,9 @@ function App() {
   }
 
   function updateCartItemCount() {
-    setCartItemCount(localStorage.getItem("cart_items_count"));
+    if(localStorage.getItem("cart_items_count")) {
+      setCartItemCount(localStorage.getItem("cart_items_count"));
+    }    
   }
 
   return (
