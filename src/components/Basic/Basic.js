@@ -213,11 +213,12 @@ export function validateSelect(fieldName, fieldValue, isMandatory) {
 export async function apiGetCall(subUrl, setterFunction, isSaveInLS, lsName) {
     let apiResponse = {};
     apiResponse["is_api_error"] = false;
+    // console.log(API_BASE_URL + subUrl);
     await fetch(API_BASE_URL + subUrl).then(res => res.json())
         .then(
             (responseJSON) => {
                 // console.log("API call back");
-                // console.log("API Status:: " + JSON.stringify(responseJSON["data"]));
+                 // console.log("API Status:: " + JSON.stringify(responseJSON["data"]));
                 if (responseJSON["success"]) {
                     setterFunction(responseJSON["data"]);
                     apiResponse["data"] = responseJSON["data"];

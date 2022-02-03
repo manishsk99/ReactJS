@@ -4,7 +4,9 @@ import { Container } from 'react-bootstrap';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
-import { THEME_COLOR } from '../basic/Constants';
+import { API_BASE_URL, THEME_COLOR } from '../basic/Constants';
+import { validateInputValue } from '../basic/Basic';
+import WaitPage from '../basic/WaitPage';
 
 function Cart(props) {
     const [cartItems, setCartItems] = useState([]);
@@ -48,7 +50,7 @@ function Cart(props) {
             setCartSummary(cartSummary);
         }
     }
-    
+
 
     return (
         <div className="bg-light h-100">
@@ -66,7 +68,10 @@ function Cart(props) {
                         <>
                             <div className="row">
                                 <div className="col-sm-8 pt-5">
-                                    <div><PinCodeBox /></div>
+                                    <div className="row pb-3">
+                                        <div className="col-sm-6"></div>
+                                        <div className="col-sm-6"><PinCodeBox /></div>
+                                    </div>
                                     <div>
                                         {
                                             cartItems.map((item, key) =>
@@ -138,15 +143,63 @@ function removeItemFromCart(itemIdToDelete) {
 }
 
 function PinCodeBox() {
+    let [isDisplayWaitPage, setIsDisplayWaitPage] = useState(false);
+    let [waitPageProgress, setWaitPageProgress] = useState(10);
+
+    let [pinCode, setPinCode] = useState("");
+    let [pinCodeError, setPinCodeError] = useState("");
+    let [pinCodeSuccess, setPinCodeSuccess] = useState("");
+
+    useEffect(() => {
+        if (localStorage.getItem("pin_code")) {
+            setPinCode(localStorage.getItem("pin_code"));
+            // checkPinCode();
+        }
+    }, []);
+    
+    function checkField(value) {
+        let isValidationError = false;
+        let v = validateInputValue("text", "Pin Code", value, "required|pincode");
+        setPinCodeError("");
+        if (v["is_invalid"] === true) {
+            isValidationError = true;
+            setPinCodeError(v["error_message"]);
+        }
+        return isValidationError;
+    }
+    function checkPinCode() {
+        let isValidationError = checkField(pinCode);
+        if (isValidationError) {
+            return;
+        }
+        setIsDisplayWaitPage(true);
+        setWaitPageProgress(50);
+        fetch(API_BASE_URL + "checkpin/" + pinCode).then(res => res.json())
+            .then(
+                (responseJSON) => {
+                    setIsDisplayWaitPage(false);
+                    // console.log("API Status:: " + JSON.stringify(responseJSON));
+                    if (responseJSON["success"]) {
+                        setPinCodeSuccess(responseJSON["message"]);
+                        localStorage.setItem("pin_code", pinCode);
+                    } else {
+                        setPinCodeError(responseJSON["message"]);
+                    }
+                }
+            );
+    }
     return (
-        <div className="row">
-            <div className="col-sm-6"></div>
-            <div className="col-sm-6">
-                <div className="input-group mb-3">
-                    <input type="text" className="form-control" placeholder="Pin Code" maxLength={6} />
-                    <button className="btn btn-outline-secondary" type="button">check</button>
-                </div>
+        <div>
+            <WaitPage isDisplay={isDisplayWaitPage} progress={waitPageProgress} />
+            <div className="input-group">
+                <input type="text" className="form-control" placeholder="Pin Code" maxLength="6"
+                    value={pinCode} onChange={(e) => setPinCode(e.target.value)}
+                    onBlur={(e) => checkField(e.target.value)} />
+
+                <button className="btn btn-outline-secondary" type="button" onClick={checkPinCode} >check</button>
             </div>
+            {pinCodeError ? <span className="text-danger"> {pinCodeError} </span> : ""}
+            {pinCodeSuccess ? <span className="text-success"> {pinCodeSuccess} </span> : ""}
         </div>
     );
 }
