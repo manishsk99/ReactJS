@@ -28,6 +28,8 @@ function AddItem() {
 
     let [primaryImage, setPrimaryImage] = useState(null);
     let [primaryImageError, setPrimaryImageError] = useState("");
+    let [otherImage, setOtherImage] = useState(null);
+    let [otherImageError, setOtherImageError] = useState("");
 
     let [inputProps] = useState({
         name: { type: "text", name: "Item Name", rule: "required", setFunction: setName },
@@ -68,6 +70,12 @@ function AddItem() {
         setPrimaryImage(file);
     }
 
+    function selectOtherImage(e) {
+        let files = e.target.files;
+        console.log(files);
+        setOtherImage(files);
+    }
+
     function checkValues(formData) {
         let isValidationError = false;
         for (let key in inputProps) {
@@ -85,7 +93,6 @@ function AddItem() {
 
     function addItem() {
         let formData = new FormData();
-        formData.append("primary_image", primaryImage);
         formData.append("name", name);
         formData.append("short_description", shortDescription);
         formData.append("description", description);
@@ -97,9 +104,15 @@ function AddItem() {
         formData.append("length", length);
         formData.append("width", width);
         formData.append("height", height);
+        formData.append("primary_image", primaryImage);
+        for (var i = 0; i < otherImage.length; i++) {
+            formData.append("other_images[]", otherImage[i]);
+        }
 
+        // console.log(formData.get("other_images"));
         setIsApiError(false);
         setPrimaryImageError("");
+        setOtherImageError("");
         if (formData.get("primary_image") === "null") {
             setPrimaryImageError("Please select primary image");
             return;
@@ -121,7 +134,7 @@ function AddItem() {
                 (responseJSON) => {
                     setWaitPageProgress(90);
                     setIsDisplayWaitPage(false);
-                    console.log(responseJSON);
+                    // console.log(responseJSON);
                     // console.log("API Status:: " + responseJSON["success"]);
                     if (responseJSON["success"]) {
                         setIsDisplaySuccessModel(true);
@@ -193,6 +206,11 @@ function AddItem() {
                     {primaryImageError !== "" ? <><span className="text-danger"> {primaryImageError} </span><br /></> : ""}
                     <br />
 
+                    <label>Other images (Only jpg, jpeg or png)</label>
+                    <input type="file" className="form-control" name="otherImages"
+                        onChange={(e) => selectOtherImage(e)} accept="image/*" multiple="multiple" />
+                    {otherImageError !== "" ? <><span className="text-danger"> {otherImageError} </span><br /></> : ""}
+                    <br />
 
                     <input className={`form-control btn btn-${THEME_COLOR}`} type="submit"
                         onClick={addItem} value={title} />
