@@ -158,9 +158,10 @@ function PinCodeBox() {
     }, []);
     
     function checkField(value) {
+        setPinCodeError("");
+        setPinCodeSuccess("");
         let isValidationError = false;
         let v = validateInputValue("text", "Pin Code", value, "required|pincode");
-        setPinCodeError("");
         if (v["is_invalid"] === true) {
             isValidationError = true;
             setPinCodeError(v["error_message"]);
@@ -174,6 +175,8 @@ function PinCodeBox() {
         }
         setIsDisplayWaitPage(true);
         setWaitPageProgress(50);
+        setPinCodeError("");
+        setPinCodeSuccess("");
         fetch(API_BASE_URL + "checkpin/" + pinCode).then(res => res.json())
             .then(
                 (responseJSON) => {
