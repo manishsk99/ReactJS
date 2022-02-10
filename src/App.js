@@ -27,6 +27,7 @@ import { ToastContainer } from 'react-toastify';
 import ManageAddress from './components/ecom/ManageAddress';
 import SelectAddress from './components/ecom/SelectAddress';
 import MakePayment from './components/ecom/MakePayment';
+import ConfirmPage from './components/ecom/ConfirmPage';
 
 export const HeaderContext = createContext();
 
@@ -80,8 +81,10 @@ function App() {
             <Route path="/" element={<HeaderContext.Provider value={updateCartItemCount}><Ecom /></HeaderContext.Provider>} />
             <Route path="/itemDetail/:itemId" element={<HeaderContext.Provider value={updateCartItemCount}><ItemDetail /></HeaderContext.Provider>} />
             <Route path="/cart" element={<Cart updateCartItemCount={updateCartItemCount} />} />
+
             <Route path="/selectaddress" element={<SelectAddress />} />
             <Route path="/makepayment" element={<MakePayment />} />
+            <Route path="/orderconfirm" element={<ConfirmPage />} />
 
             <Route path="*" element={<PageNotFound />} />
           </Routes>

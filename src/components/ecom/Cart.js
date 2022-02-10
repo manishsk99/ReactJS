@@ -34,73 +34,96 @@ function Cart(props) {
     function updateCartSummery() {
         if (localStorage.getItem("cart_items") != null) {
             let cartItemsLS = JSON.parse(localStorage.getItem("cart_items"));
-            let itemPrice = 0;
-            let discAmount = 100;
-            let deliveryChrg = 50;
-            cartItemsLS.forEach(item => {
-                itemPrice = itemPrice + parseFloat(item.selling_price);
-            });
-            let totalAmount = (itemPrice + deliveryChrg) - discAmount;
-            let cartSummary = {
-                "itemTotalPrice": itemPrice,
-                "discountAmount": discAmount,
-                "deliveryCharges": deliveryChrg,
-                "totalAmount": totalAmount
-            };
+            let cartSummary = getCartSummery(cartItemsLS);
             setCartSummary(cartSummary);
         }
     }
 
 
     return (
-        <div className="bg-light h-100">
-            <Container>
-
-                <div className="mb-3">
-
-                    {cartItems.length === 0 ?
-                        <div className="row justify-content-center p-4">
-                            <div className="card col-sm-8 col-lg-4 p-4">
-                                <span>No item added in cart <Link to="/">Continue shopping</Link></span>
+        <>
+            {
+                props.viewOnly ?
+                    <>
+                        <CartItemList cartItems={cartItems} />
+                        <div className="row mt-4">
+                            <div className="col-sm-6"></div>
+                            <div className="col-sm-6">
+                                <CartSummery cartSummary={cartSummary} />
                             </div>
                         </div>
-                        :
-                        <>
-                            <div className="row">
-                                <div className="col-sm-8 pt-5">
-                                    <div className="row pb-3">
-                                        <div className="col-sm-6"></div>
-                                        <div className="col-sm-6"><PinCodeBox /></div>
-                                    </div>
-                                    <div>
-                                        {
-                                            cartItems.map((item, key) =>
-                                                <CartItem key={key} itemDetail={item} removeFunction={removeItemFromCartOpration} />
-                                            )
-                                        }
-                                    </div>
-                                    <div className="row mt-4">
-                                        <div className="col-sm-6"></div>
-                                        <div className="col-sm-6">
-                                            <Link className={"form-control form-control-lg btn btn-" + THEME_COLOR} to="/selectaddress" >Continue</Link>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="col-sm-4">
-                                    <CartSummery cartSummary={cartSummary} />
+                    </>
+                    :
+                    <div className="h-100">
+                        <Container>
+
+                            <div className="row justify-content-center p-4 mb-3">
+                                <div className="card col-sm-8 p-4">
+                                    {cartItems.length === 0 ?
+                                        <span>No item added in cart <Link to="/">Continue shopping</Link></span>
+                                        :
+                                        <>
+                                            <div>
+                                                <div className="row pb-3">
+                                                    <div className="col-sm-6"></div>
+                                                    <div className="col-sm-6"><PinCodeBox /></div>
+                                                </div>
+                                                <CartItemList cartItems={cartItems} removeFunction={removeItemFromCartOpration} />
+
+                                                <div className="row mt-4">
+                                                    <div className="col-sm-6"></div>
+                                                    <div className="col-sm-6">
+                                                        <CartSummery cartSummary={cartSummary} />
+                                                        <Link className={"form-control form-control-lg btn btn-" + THEME_COLOR} to="/selectaddress" >Continue</Link>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </>
+                                    }
                                 </div>
                             </div>
+                        </Container>
+                    </div>
 
-                        </>
-                    }
-
-                </div>
-            </Container>
-        </div>
+            }
+        </>
     )
 }
 
 export default Cart;
+
+export function CartItemList(props) {
+    return (
+        <div>
+            {
+                props.cartItems.map((item, key) =>
+                    <CartItem key={key} itemDetail={item} removeFunction={props.removeFunction} />
+                )
+            }
+        </div>
+    );
+}
+
+export function getCartSummery(cartItemsList) {
+    let cartSummary = {};
+    if (cartItemsList != null) {
+        let itemPrice = 0;
+        let discAmount = 100;
+        let deliveryChrg = 50;
+        cartItemsList.forEach(item => {
+            itemPrice = itemPrice + parseFloat(item.selling_price);
+        });
+        let totalAmount = (itemPrice + deliveryChrg) - discAmount;
+        cartSummary = {
+            "itemTotalPrice": itemPrice,
+            "discountAmount": discAmount,
+            "deliveryCharges": deliveryChrg,
+            "totalAmount": totalAmount
+        };
+    }
+    return cartSummary;
+}
 
 export function addToCart(item) {
     let cartItems = [];
@@ -156,7 +179,7 @@ function PinCodeBox() {
             // checkPinCode();
         }
     }, []);
-    
+
     function checkField(value) {
         setPinCodeError("");
         setPinCodeSuccess("");

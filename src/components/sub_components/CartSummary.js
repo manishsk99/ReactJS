@@ -1,7 +1,7 @@
 
 function CartSummary({cartSummary}) {
     return (
-        <div className="pt-5  sticky-top">
+        <div className="pt-3 pb-3">
         <div className="card mt-3 bg-white shadow">
         <table className="table">
             <thead>

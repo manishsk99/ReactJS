@@ -210,6 +210,21 @@ export function validateSelect(fieldName, fieldValue, isMandatory) {
     return validationOutput;
 }
 
+export function checkAllFieldsValues(data, inputProps, setApiError) {
+    let isValidationError = false;
+
+    for (let key in inputProps) {
+        let value = inputProps[key];
+        let v = validateInputValue(value.type, value.name, data[key], value.rule);
+        if (v["is_invalid"] === true) {
+            isValidationError = true;
+            setApiError(v["error_message"]);
+            return isValidationError;
+        }
+    }
+    return isValidationError;
+}
+
 export async function apiGetCall(subUrl, setterFunction, isSaveInLS, lsName) {
     let apiResponse = {};
     apiResponse["is_api_error"] = false;

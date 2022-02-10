@@ -21,6 +21,7 @@ function SelectAddress() {
             setApiError("Please select an address to deliver.");
             return;
         }
+        localStorage.setItem("selectedAddressId", selectedAddressId);
         navigate("/makepayment");
     }
     return (
