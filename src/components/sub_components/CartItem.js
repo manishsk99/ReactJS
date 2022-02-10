@@ -4,13 +4,13 @@ import { IMAGE_BASE_URL } from "../basic/Constants";
 function CardItem(props) {
     let item = props.itemDetail;
 
-    function removeItemFunction () {
+    function removeItemFunction() {
         props.removeFunction(item.id);
     }
 
     return (
         <div className="card sm-3 mt-3 shadow">
-            <CloseButton className="position-absolute top-0 end-0" onClick={removeItemFunction}/>
+            {props.removeFunction ? <CloseButton className="position-absolute top-0 end-0" onClick={removeItemFunction} /> : ""}
             <div className="row g-0">
                 <div className="col-sm-2">
                     <img src={IMAGE_BASE_URL + item.primary_image} className="cart-img img-fluid rounded-start" alt={item.name} />
