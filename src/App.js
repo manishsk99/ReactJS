@@ -28,6 +28,7 @@ import ManageAddress from './components/ecom/ManageAddress';
 import SelectAddress from './components/ecom/SelectAddress';
 import MakePayment from './components/ecom/MakePayment';
 import ConfirmPage from './components/ecom/ConfirmPage';
+import MyOrders from './components/ecom/MyOrders';
 
 export const HeaderContext = createContext();
 
@@ -50,6 +51,9 @@ function App() {
   }
 
   function updateCartItemCount() {
+    if(!localStorage.getItem("cart_items")) {
+      localStorage.setItem("cart_items_count", 0);
+    }
     if(localStorage.getItem("cart_items_count")) {
       setCartItemCount(localStorage.getItem("cart_items_count"));
     }    
@@ -74,6 +78,7 @@ function App() {
             <Route path="/additem" element={<AccountHome comp={AddItem} />} />
             <Route path="/addaddress" element={<AccountHome comp={AddAddress} />} />
             <Route path="/manageaddress" element={<AccountHome comp={ManageAddress} />} />
+            <Route path="/myorders" element={<AccountHome comp={MyOrders} />} />
 
             <Route path="/trans" element={<AccountHome comp={Transactions} />} />
 
@@ -83,7 +88,7 @@ function App() {
             <Route path="/cart" element={<Cart updateCartItemCount={updateCartItemCount} />} />
 
             <Route path="/selectaddress" element={<SelectAddress />} />
-            <Route path="/makepayment" element={<MakePayment />} />
+            <Route path="/makepayment" element={<MakePayment updateCartItemCount={updateCartItemCount} />} />
             <Route path="/orderconfirm" element={<ConfirmPage />} />
 
             <Route path="*" element={<PageNotFound />} />

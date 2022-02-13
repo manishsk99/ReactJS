@@ -8,7 +8,7 @@ import PaymentOption from "../payment/PaymentOption";
 import Cart from "./Cart";
 import { AddressLebel } from "./ManageAddress";
 
-function MakePayment() {
+function MakePayment(props) {
     let [isDisplayWaitPage, setIsDisplayWaitPage] = useState(false);
     let [waitPageProgress, setWaitPageProgress] = useState(10);
     let [apiError, setApiError] = useState("");
@@ -72,8 +72,10 @@ function MakePayment() {
                     // console.log(responseJSON);
                     // console.log("API Status:: " + responseJSON["success"]);
                     if (responseJSON["success"]) {
-                        let orderId = responseJSON["data"].id;
-                        console.log("orderId:: " + orderId);
+                        localStorage.removeItem("cart_items");
+                        props.updateCartItemCount();
+                        //let orderId = responseJSON["data"].id;
+                        //console.log("orderId:: " + orderId);
                         navigate("/orderconfirm");
                     } else {
                         setApiError("Some error occurred.");
@@ -92,14 +94,15 @@ function MakePayment() {
 
     return (
         <Container>
-            <WaitPage isDisplay={isDisplayWaitPage} progress={waitPageProgress} />
-
             <div className="row justify-content-center mb-3 mt-3">
                 <div className="col-sm-8 card p-3">
                     <h1 className="card-title text-center">Make Payment</h1>
+
+                    <WaitPage isDisplay={isDisplayWaitPage} progress={waitPageProgress} />
                     {apiError ? <Alert key="danger" variant="danger">
                         {apiError}
                     </Alert> : ""}
+                    
                     <Accordion defaultActiveKey="2">
                         <Accordion.Item eventKey="0">
                             <Accordion.Header>Item Details</Accordion.Header>

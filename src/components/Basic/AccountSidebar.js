@@ -10,8 +10,8 @@ function AccountSidebar() {
             <ListGroup.Item action as={Link} to="/additem" href="#link2">
                 Add Item
             </ListGroup.Item>
-            <ListGroup.Item action as={Link} to="/trans" href="#link3">
-                Transactions
+            <ListGroup.Item action as={Link} to="/myorders" href="#link3">
+                My Orders
             </ListGroup.Item>
             <ListGroup.Item action as={Link} to="/manageaddress" href="#link5">
                 Manage Address

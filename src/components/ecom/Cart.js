@@ -45,11 +45,11 @@ function Cart(props) {
             {
                 props.viewOnly ?
                     <>
-                        <CartItemList cartItems={cartItems} />
+                        <CartItemList cartItems={cartItems} isApterPurchase="0" />
                         <div className="row mt-4">
                             <div className="col-sm-6"></div>
                             <div className="col-sm-6">
-                                <CartSummery cartSummary={cartSummary} />
+                                <CartSummery cartSummary={cartSummary} isApterPurchase="0" />
                             </div>
                         </div>
                     </>
@@ -68,12 +68,12 @@ function Cart(props) {
                                                     <div className="col-sm-6"></div>
                                                     <div className="col-sm-6"><PinCodeBox /></div>
                                                 </div>
-                                                <CartItemList cartItems={cartItems} removeFunction={removeItemFromCartOpration} />
+                                                <CartItemList cartItems={cartItems} removeFunction={removeItemFromCartOpration} isApterPurchase="0" />
 
                                                 <div className="row mt-4">
                                                     <div className="col-sm-6"></div>
                                                     <div className="col-sm-6">
-                                                        <CartSummery cartSummary={cartSummary} />
+                                                        <CartSummery cartSummary={cartSummary} isApterPurchase="0" />
                                                         <Link className={"form-control form-control-lg btn btn-" + THEME_COLOR} to="/selectaddress" >Continue</Link>
                                                     </div>
                                                 </div>
@@ -98,7 +98,7 @@ export function CartItemList(props) {
         <div>
             {
                 props.cartItems.map((item, key) =>
-                    <CartItem key={key} itemDetail={item} removeFunction={props.removeFunction} />
+                    <CartItem key={key} itemDetail={item} removeFunction={props.removeFunction} isApterPurchase={props.isApterPurchase} />
                 )
             }
         </div>
@@ -112,7 +112,7 @@ export function getCartSummery(cartItemsList) {
         let discAmount = 100;
         let deliveryChrg = 50;
         cartItemsList.forEach(item => {
-            itemPrice = itemPrice + parseFloat(item.selling_price);
+            itemPrice = itemPrice + parseFloat(item.selling_price) * parseInt(item.quantity);
         });
         let totalAmount = (itemPrice + deliveryChrg) - discAmount;
         cartSummary = {
@@ -134,13 +134,20 @@ export function addToCart(item) {
     let isItemAlreadyAdded = 0;
     for (let i = 0; i < cartItems.length; i++) {
         const itemLS = cartItems[i];
-        if (itemLS.id === item.id) {
+        if (itemLS.item.id === item.id) {
             isItemAlreadyAdded = 1;
+            itemLS.quantity = itemLS.quantity + 1;
             break;
         }
     }
     if (isItemAlreadyAdded === 0) {
-        cartItems.push(item);
+        let cart_item = {
+            selling_price : item.selling_price,
+            mrp : item.mrp,
+            item : item,
+            quantity : 1
+        };
+        cartItems.push(cart_item);
     }
     localStorage.setItem("cart_items", JSON.stringify(cartItems));
     localStorage.setItem("cart_items_count", cartItems.length);
@@ -154,7 +161,7 @@ function removeItemFromCart(itemIdToDelete) {
         for (let i = 0; i < cartItemsLS.length; i++) {
             const itemLS = cartItemsLS[i];
             // console.log("ids::" + itemLS.id + "," + item.id);
-            if (itemLS.id === itemIdToDelete) {
+            if (itemLS.item.id === itemIdToDelete) {
                 cartItemsLS.splice(i, 1);
                 // console.log("after delete");
                 break;

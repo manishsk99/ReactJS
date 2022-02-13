@@ -38,7 +38,8 @@ function Header(props) {
                                 <NavDropdown title="My Account" id="collasible-nav-dropdown">
                                     <NavDropdown.Item eventKey="6" as={Link} to="/myprofile">Profile</NavDropdown.Item>
                                     <NavDropdown.Item eventKey="7" as={Link} to="/additem">Add Item</NavDropdown.Item>
-                                    <NavDropdown.Item eventKey="8" as={Link} to="/trans">Transactions</NavDropdown.Item>
+                                    <NavDropdown.Item eventKey="8" as={Link} to="/myorders">My Orders</NavDropdown.Item>
+                                    <NavDropdown.Item eventKey="10" as={Link} to="/manageaddress">Manage Address</NavDropdown.Item>
                                     <NavDropdown.Divider />
                                     <NavDropdown.Item eventKey="9" as={Link} to="/logout" onClick={logout}>Logout</NavDropdown.Item>
                                 </NavDropdown>

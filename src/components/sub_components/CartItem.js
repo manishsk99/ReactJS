@@ -2,7 +2,8 @@ import { CloseButton } from "react-bootstrap";
 import { IMAGE_BASE_URL } from "../basic/Constants";
 
 function CardItem(props) {
-    let item = props.itemDetail;
+    let cartItem = props.itemDetail;
+    let item = cartItem.item;
 
     function removeItemFunction() {
         props.removeFunction(item.id);
@@ -23,8 +24,8 @@ function CardItem(props) {
                 </div>
                 <div className="col-sm-4 text-end">
                     <div className="card-body">
-                        <strong>&#x20B9; {item.selling_price}</strong> <br />
-                        <strike className="text-muted">&#x20B9; {item.mrp}</strike>
+                        <strong>&#x20B9; {props.isApterPurchase?cartItem.selling_price:item.selling_price}</strong> <br />
+                        <strike className="text-muted">&#x20B9; {props.isApterPurchase?cartItem.mrp:item.mrp}</strike>
                     </div>
                 </div>
             </div>
