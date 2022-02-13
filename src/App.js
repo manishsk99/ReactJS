@@ -29,6 +29,7 @@ import SelectAddress from './components/ecom/SelectAddress';
 import MakePayment from './components/ecom/MakePayment';
 import ConfirmPage from './components/ecom/ConfirmPage';
 import MyOrders from './components/ecom/MyOrders';
+import ProtectedRoute from './components/basic/ProtectedRoute';
 
 export const HeaderContext = createContext();
 
@@ -87,9 +88,9 @@ function App() {
             <Route path="/itemDetail/:itemId" element={<HeaderContext.Provider value={updateCartItemCount}><ItemDetail /></HeaderContext.Provider>} />
             <Route path="/cart" element={<Cart updateCartItemCount={updateCartItemCount} />} />
 
-            <Route path="/selectaddress" element={<SelectAddress />} />
-            <Route path="/makepayment" element={<MakePayment updateCartItemCount={updateCartItemCount} />} />
-            <Route path="/orderconfirm" element={<ConfirmPage />} />
+            <Route path="/selectaddress" element={<ProtectedRoute component={SelectAddress}></ProtectedRoute>} />
+            <Route path="/makepayment" element={<ProtectedRoute><MakePayment updateCartItemCount={updateCartItemCount} /></ProtectedRoute>} />
+            <Route path="/orderconfirm" element={<ProtectedRoute><ConfirmPage /></ProtectedRoute>} />
 
             <Route path="*" element={<PageNotFound />} />
           </Routes>

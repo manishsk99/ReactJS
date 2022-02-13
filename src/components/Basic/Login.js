@@ -7,7 +7,7 @@ import WaitPage from './WaitPage';
 
 function Login(props) {
     let redirectTo = "/myprofile";
-    // console.log("props.redirectTo:: " + props.redirectTo);
+    console.log("props.redirectTo:: " + props.redirectTo);
     if(props.redirectTo) {
         redirectTo = props.redirectTo;
     }
