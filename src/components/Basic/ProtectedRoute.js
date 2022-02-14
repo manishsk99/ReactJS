@@ -1,10 +1,10 @@
-import { Navigate } from "react-router-dom";
+import { Navigate, useLocation } from "react-router-dom";
 
 function ProtectedRoute({ component: Component, ...rest }) {
-
+    const location = useLocation();
     return (
-        localStorage.getItem("is_logged_In") ? <Component {...rest} />
-        : <Navigate to="/login" state={{ redirectTo: rest.path }} />
+        localStorage.getItem("is_logged_In") ? <Component />
+        : <Navigate to="/login" state={{ returnTo: location.pathname }} />
      );
 }
 

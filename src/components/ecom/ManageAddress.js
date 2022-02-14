@@ -95,7 +95,7 @@ export function AddressLebel({address, ...props}) {
             <div>
                 <strong>{address.name} </strong>
                 <span className="badge bg-secondary">{address.type === 1 ? "Home" : "Work"}</span>&nbsp;
-               {props.returnTo?<Link to="/addaddress" state={{ addressDetail: address, returnTo: props.returnTo }} >Edit</Link> :""}
+                <Link to="/addaddress" state={{ addressDetail: address, returnTo: props.returnTo }} >Edit</Link>
                 <p>{address.address1}, {address.address2 ? address.address2 + "," : ""} {address.landmark} <br />
                     {address.city}, {address.state} - {address.pin_code} <br />
                     Phone : {address.phone}

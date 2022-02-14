@@ -68,6 +68,7 @@ function App() {
         <div className="app-body">
 
           <Routes>
+            {/* Normal route */}
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/login" element={<Login updateLocalData={updateLocalData} />} />
@@ -75,23 +76,27 @@ function App() {
             <Route path="/signup" element={<Signup />} />
             <Route path="/forgetPassword" element={<ForgetPassword />} />
 
+            <Route path="/home" element={<Home />} />
+            <Route path="/itemDetail/:itemId" element={<HeaderContext.Provider value={updateCartItemCount}><ItemDetail /></HeaderContext.Provider>} />
+            <Route path="/cart" element={<Cart updateCartItemCount={updateCartItemCount} />} />
+
+            {/* User private route */}
             <Route path="/myprofile" element={<AccountHome comp={MyProfile} />} />
-            <Route path="/additem" element={<AccountHome comp={AddItem} />} />
             <Route path="/addaddress" element={<AccountHome comp={AddAddress} />} />
             <Route path="/manageaddress" element={<AccountHome comp={ManageAddress} />} />
             <Route path="/myorders" element={<AccountHome comp={MyOrders} />} />
 
             <Route path="/trans" element={<AccountHome comp={Transactions} />} />
 
-            <Route path="/home" element={<Home />} />
-            <Route path="/" element={<HeaderContext.Provider value={updateCartItemCount}><Ecom /></HeaderContext.Provider>} />
-            <Route path="/itemDetail/:itemId" element={<HeaderContext.Provider value={updateCartItemCount}><ItemDetail /></HeaderContext.Provider>} />
-            <Route path="/cart" element={<Cart updateCartItemCount={updateCartItemCount} />} />
+            <Route path="/selectaddress" element={<ProtectedRoute component={SelectAddress} />} />
+            <Route path="/makepayment" element={<HeaderContext.Provider value={updateCartItemCount}><ProtectedRoute component={MakePayment} /></HeaderContext.Provider>} />
+            <Route path="/orderconfirm" element={<ProtectedRoute component={ConfirmPage} />} />
 
-            <Route path="/selectaddress" element={<ProtectedRoute component={SelectAddress}></ProtectedRoute>} />
-            <Route path="/makepayment" element={<ProtectedRoute><MakePayment updateCartItemCount={updateCartItemCount} /></ProtectedRoute>} />
-            <Route path="/orderconfirm" element={<ProtectedRoute><ConfirmPage /></ProtectedRoute>} />
+            {/* Seller route */}
+            <Route path="/additem" element={<AccountHome comp={AddItem} />} />
 
+            {/* Default route */}
+            <Route exact path="/" element={<HeaderContext.Provider value={updateCartItemCount}><Ecom /></HeaderContext.Provider>} />
             <Route path="*" element={<PageNotFound />} />
           </Routes>
         </div>

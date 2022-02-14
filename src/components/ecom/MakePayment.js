@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { Accordion, Alert, Button, Container } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { apiGetCall } from "../basic/Basic";
@@ -7,8 +7,10 @@ import WaitPage from "../basic/WaitPage";
 import PaymentOption from "../payment/PaymentOption";
 import Cart from "./Cart";
 import { AddressLebel } from "./ManageAddress";
+import { HeaderContext } from '../../App.js';
 
 function MakePayment(props) {
+    const updateCartItemCount = useContext(HeaderContext);
     let [isDisplayWaitPage, setIsDisplayWaitPage] = useState(false);
     let [waitPageProgress, setWaitPageProgress] = useState(10);
     let [apiError, setApiError] = useState("");
@@ -73,7 +75,7 @@ function MakePayment(props) {
                     // console.log("API Status:: " + responseJSON["success"]);
                     if (responseJSON["success"]) {
                         localStorage.removeItem("cart_items");
-                        props.updateCartItemCount();
+                        updateCartItemCount();
                         //let orderId = responseJSON["data"].id;
                         //console.log("orderId:: " + orderId);
                         navigate("/orderconfirm");

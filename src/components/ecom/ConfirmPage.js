@@ -5,12 +5,13 @@ function ConfirmPage() {
     return ( 
         <Container>
             <div className="row justify-content-center mb-3 mt-3 p-3">
-                <div className="col-sm-8 card">
-                    <h1 className="card-title text-center">Order Placed Successfully</h1>
+                <div className="col-sm-8 card text-center p-3">
+                    <h1 className="card-title text-success">Order Placed Successfully</h1>
                     <br />
-                    <span>Go to <Link to="/myorders">My Orders</Link>
-                     &nbsp;or <Link to="/">continue shopping</Link></span>
-                    
+                    <div>
+                        <span>Go to <Link to="/myorders">My Orders</Link>
+                        &nbsp;or <Link to="/">continue shopping</Link></span>
+                     </div>
                 </div>
             </div>
         </Container>
