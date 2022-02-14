@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { Button, Container } from "react-bootstrap";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { HeaderContext } from "../../App";
 import { apiGetCall } from "../basic/Basic";
 import { IMAGE_BASE_URL } from "../basic/Constants";
@@ -11,6 +11,7 @@ import { addToCart, PinCodeBox } from "./Cart";
 function ItemDetail() {
     let [isDisplayWaitPage, setIsDisplayWaitPage] = useState(false);
     let [waitPageProgress, setWaitPageProgress] = useState(10);
+    let navigate = useNavigate();
 
     let [item, setItem] = useState({});
     const {itemId} = useParams();
@@ -19,6 +20,11 @@ function ItemDetail() {
     function addToCartOpration() {
         addToCart(item);
         updateCartItemCount();
+    }
+
+    function buyNow() {
+        addToCartOpration();
+        navigate("/cart");
     }
 
     useEffect(() => {
@@ -31,7 +37,7 @@ function ItemDetail() {
                 setIsDisplayWaitPage(false);
             }
         );
-    }, [itemId])
+    }, [itemId]);
 
     return (
         <Container className="pt-4 pb-4">
@@ -60,7 +66,7 @@ function ItemDetail() {
                         
                         <div className="row mt-3 mb-4">
                             <div className="col-3">
-                                <Button variant="warning" onClick={addToCartOpration} >Buy Now</Button>
+                                <Button variant="warning" onClick={buyNow} >Buy Now</Button>
                             </div>
                             <div className="col-3 text-end">
                                 <Button variant="primary" onClick={addToCartOpration} >Add to cart</Button>

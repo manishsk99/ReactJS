@@ -26,10 +26,10 @@ function ItemCard(props) {
                     </p>
                     <div className="row">
                         <div className="col-4">
-                            <Link to={"itemDetail/" + item.id}>view</Link>
+                            <Link className="stretched-link" to={"itemDetail/" + item.id}>view</Link>
                         </div>
                         <div className="col-8 text-end">
-                            <Button variant="primary" onClick={addToCartOpration} >Add to cart</Button>
+                            <Button variant="primary" onClick={addToCartOpration} style={{ position: 'relative', zIndex: 2 }} >Add to cart</Button>
                         </div>
                     </div>
                 </div>
@@ -55,8 +55,8 @@ export function ItemPriceDetail(props) {
     return (
         <>
             <span>
-                <strong className={props.isCard === true ? "" : "fs-4"}>&#x20B9; {props.mrp}</strong>&nbsp;
-                <strike className="text-muted">&#x20B9; {props.selling_price}</strike>&nbsp;
+                <strong className={props.isCard === true ? "" : "fs-4"}>&#x20B9; {props.selling_price}</strong>&nbsp;
+                <strike className="text-muted">&#x20B9; {props.mrp}</strike>&nbsp;
                 {percent > 1 ? <strong className="text-success">{percent}% off</strong> : ""}
             </span>
         </>

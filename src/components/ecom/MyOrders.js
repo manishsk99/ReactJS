@@ -73,10 +73,10 @@ function OrderDetail(props) {
 
     return (
         <>
-            <CartItemList cartItems={props.orderItems} isApterPurchase="1" />
+            <CartItemList cartItems={props.orderItems} isAfterPurchase="1" />
             <div className="row mt-4">
                 <div className="col-sm-6">
-                    <CartSummery cartSummary={cartSummary} isApterPurchase="1" />
+                    <CartSummery cartSummary={cartSummary} isAfterPurchase="1" />
                 </div>
                 <div className="col-sm-6 mt-5">
                     <AddressLebel address={props.address} />

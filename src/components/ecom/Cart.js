@@ -131,28 +131,44 @@ export function addToCart(item) {
         cartItems = JSON.parse(localStorage.getItem("cart_items"));
         // console.log("cartItems111::" + JSON.stringify(cartItems));
     }
-    let isItemAlreadyAdded = 0;
-    for (let i = 0; i < cartItems.length; i++) {
-        const itemLS = cartItems[i];
-        if (itemLS.item.id === item.id) {
-            isItemAlreadyAdded = 1;
-            itemLS.quantity = itemLS.quantity + 1;
-            break;
-        }
-    }
+    let isItemAlreadyAdded = updateCartItemQuantity(cartItems, item.id, 1, false);
     if (isItemAlreadyAdded === 0) {
         let cart_item = {
-            selling_price : item.selling_price,
-            mrp : item.mrp,
-            item : item,
-            quantity : 1
+            selling_price: item.selling_price,
+            mrp: item.mrp,
+            item: item,
+            quantity: 1
         };
         cartItems.push(cart_item);
     }
-    localStorage.setItem("cart_items", JSON.stringify(cartItems));
-    localStorage.setItem("cart_items_count", cartItems.length);
+    updateLocalStorageCartItems(cartItems);
 
     toast.success(item.name + " added to cart", { autoClose: 2000 });
+}
+
+function updateLocalStorageCartItems(cartItems) {
+    localStorage.setItem("cart_items", JSON.stringify(cartItems));
+    localStorage.setItem("cart_items_count", cartItems.length);
+}
+
+export function updateCartItemQuantity(cartItems, itemId, quantityToAdd, isChange) {
+    if (cartItems == null) {
+        cartItems = JSON.parse(localStorage.getItem("cart_items"));
+    }
+    let isItemAlreadyAdded = 0;
+    for (let i = 0; i < cartItems.length; i++) {
+        const itemLS = cartItems[i];
+        if (itemLS.item.id === itemId) {
+            isItemAlreadyAdded = 1;
+            if (isChange) {
+                itemLS.quantity = quantityToAdd;
+            } else {
+                itemLS.quantity = itemLS.quantity + quantityToAdd;
+            }
+            break;
+        }
+    }
+    return isItemAlreadyAdded;
 }
 
 function removeItemFromCart(itemIdToDelete) {
@@ -167,8 +183,7 @@ function removeItemFromCart(itemIdToDelete) {
                 break;
             }
         }
-        localStorage.setItem("cart_items", JSON.stringify(cartItemsLS));
-        localStorage.setItem("cart_items_count", cartItemsLS.length);
+        updateLocalStorageCartItems(cartItemsLS);
     }
 }
 

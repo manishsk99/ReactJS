@@ -13,9 +13,6 @@ function AccountSidebar() {
             <ListGroup.Item action as={Link} to="/manageaddress" href="#link5">
                 Manage Address
             </ListGroup.Item>
-            <ListGroup.Item action as={Link} to="/logout" href="#link4">
-                Logout
-            </ListGroup.Item>
         </ListGroup>
     );
 }
