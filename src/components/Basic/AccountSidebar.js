@@ -7,9 +7,6 @@ function AccountSidebar() {
             <ListGroup.Item action as={Link} to="/myprofile" href="#link1">
                 My profile
             </ListGroup.Item>
-            <ListGroup.Item action as={Link} to="/additem" href="#link2">
-                Add Item
-            </ListGroup.Item>
             <ListGroup.Item action as={Link} to="/myorders" href="#link3">
                 My Orders
             </ListGroup.Item>

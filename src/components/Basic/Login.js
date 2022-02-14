@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { THEME_COLOR, API_BASE_URL } from './Constants';
 import { validateEmail, validateField } from './Basic';
 import { Alert } from 'react-bootstrap';
@@ -7,11 +7,14 @@ import WaitPage from './WaitPage';
 
 function Login(props) {
     let redirectTo = "/myprofile";
-    console.log("props.redirectTo:: " + props.redirectTo);
-    if(props.redirectTo) {
-        redirectTo = props.redirectTo;
+    const location = useLocation();
+    if (location.state) {
+        const { returnTo } = location.state;
+        if (returnTo) {
+            redirectTo = returnTo;
+        }
+         console.log("redirectTo: " + redirectTo);
     }
-    // console.log("redirectTo:: " + redirectTo);
     let [isDisplayWaitPage, setIsDisplayWaitPage] = useState(false);
     let [waitPageProgress, setWaitPageProgress] = useState(10);
 
@@ -85,8 +88,8 @@ function Login(props) {
                 (responseJSON) => {
                     setWaitPageProgress(90);
                     setIsDisplayWaitPage(false);
-                    console.log(responseJSON);
-                    console.log("API Status:: " + responseJSON["success"]);
+                    // console.log(responseJSON);
+                    // console.log("API Status:: " + responseJSON["success"]);
                     if (responseJSON["success"]) {
                         localStorage.setItem('is_logged_In', true);
                         localStorage.setItem('name', responseJSON["data"]["name"]);
