@@ -1,4 +1,4 @@
-export const BRAND_NAME = "e-PUR Online Services";
+export const BRAND_NAME = "Mewati Devi Enterprises";
 
 export const THEME_COLOR = "theme";
 
