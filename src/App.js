@@ -8,7 +8,7 @@ import Header from './components/basic/Header';
 import Home from './components/basic/Home';
 import About from './components/basic/About';
 import Contact from './components/basic/Contact';
-import Login from './components/basic/Login';
+import Login, {VerifyEmail} from './components/basic/Login';
 import Logout from './components/basic/Logout'
 import Signup from './components/basic/Signup';
 import PageNotFound from './components/basic/PageNotFound';
@@ -75,6 +75,7 @@ function App() {
             <Route path="/logout" element={<Logout />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/forgetPassword" element={<ForgetPassword />} />
+            <Route path="/verifyemail/:token" element={<VerifyEmail />} />
 
             <Route path="/home" element={<Home />} />
             <Route path="/itemDetail/:itemId" element={<HeaderContext.Provider value={updateCartItemCount}><ItemDetail /></HeaderContext.Provider>} />
