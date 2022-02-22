@@ -65,7 +65,7 @@ export function AddressList(props) {
                 <WaitPage isDisplay={isDisplayWaitPage} progress={waitPageProgress} />
 
                 {
-                    addressList.length === 0 ? "Address not added yet." :
+                    addressList.length === 0 ? <>Address not added yet. <br /><br /></> :
                         addressList.map((address, key) =>
                             <div key={key}>
                                 <div className="form-check">
@@ -95,7 +95,7 @@ export function AddressLebel({address, ...props}) {
             <div>
                 <strong>{address.name} </strong>
                 <span className="badge bg-secondary">{address.type === 1 ? "Home" : "Work"}</span>&nbsp;
-                <Link to="/addaddress" state={{ addressDetail: address, returnTo: props.returnTo }} >Edit</Link>
+                {props.readOnly ? "" : <Link to="/addaddress" state={{ addressDetail: address, returnTo: props.returnTo }} >Edit</Link>}
                 <p>{address.address1}, {address.address2 ? address.address2 + "," : ""} {address.landmark} <br />
                     {address.city}, {address.state} - {address.pin_code} <br />
                     Phone : {address.phone}

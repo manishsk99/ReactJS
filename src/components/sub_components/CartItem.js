@@ -43,8 +43,8 @@ function CardItem(props) {
                     </div>
                     <div className="col-sm-4 text-end">
                         <div className="card-body">
-                            {cartItem.quantity}
-                            <QuantityElement />
+                            {props.isAfterPurchase? cartItem.quantity : <QuantityElement quantity={cartItem.quantity} />}
+                            
                         </div>
                     </div>
                 </div>
@@ -54,8 +54,15 @@ function CardItem(props) {
 }
 export default CardItem;
 
-export function QuantityElement() {
+export function QuantityElement(props) {
     const [quantity, setQuantity] = useState(1);
+
+    useEffect(() => {
+        if (props.quantity) {
+            setQuantity(props.quantity);
+        }
+    }, [props]);
+
     function changeQuantity(quantityToAdd) {
         let q = quantity + quantityToAdd;
         if (q < 0) {
