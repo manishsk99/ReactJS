@@ -2,8 +2,9 @@ import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Alert, Modal, Button } from 'react-bootstrap';
 import { THEME_COLOR, API_BASE_URL } from './Constants';
-import { validateField, validateEmail } from './Basic';
+import { checkAllFieldsValues } from './Basic';
 import WaitPage from './WaitPage';
+import AppInput from '../sub_components/AppInput';
 
 function Signup() {
     let [isDisplayWaitPage, setIsDisplayWaitPage] = useState(false);
@@ -12,20 +13,20 @@ function Signup() {
 
     let [name, setName] = useState("");
     let [email, setEmail] = useState("");
+    let [phone, setPhone] = useState("");
     let [password, setPassword] = useState("");
     let [confirm_password, setConfirm_Password] = useState("");
     let [isApiError, setIsApiError] = useState(false);
     let [apiError, setApiError] = useState("");
 
-    let [isNameInvalid, setIsNameInvalid] = useState(false);
-    let [isEmailInvalid, setIsEmailInvalid] = useState(false);
-    let [isPasswordInvalid, setIsPasswordInvalid] = useState(false);
-    let [isConfirmPasswordInvalid, setIsConfirmPasswordInvalid] = useState(false);
-    let [nameError, setNameError] = useState("");
-    let [emailError, setEmailError] = useState("");
-    let [passwordError, setPasswordError] = useState("");
-    let [confirmPasswordError, setConfirmPasswordError] = useState("");
     let navigate = useNavigate();
+    let [inputProps] = useState({
+        name: { type: "text", name: "Full Name", rule: "required|alphaOnly", setFunction: setName },
+        email: { type: "text", name: "Email", rule: "required|email", setFunction: setEmail },
+        phone: { type: "text", name: "Phone", rule: "required|phone", setFunction: setPhone },
+        password: { type: "password", name: "Password", rule: "required|min:8|max:15", setFunction: setPassword },
+        confirm_password: { type: "password", name: "Confirm Password", rule: "required|min:8|max:15", setFunction: setConfirm_Password }
+    });
 
     useEffect(() => {
         document.title = "Signup";
@@ -34,80 +35,21 @@ function Signup() {
     function formHandling(e) {
         e.preventDefault();
     }
-    function checkName(value) {
-        let isValidationError = false;
-        let v = validateField("Name", value);
-        setIsNameInvalid(false);
-        if (v["is_invalid"] === true) {
-            isValidationError = true;
-            setIsNameInvalid(true);
-            setNameError(v["error_message"]);
-        }
-        return isValidationError;
-    }
-    function checkEmail(value) {
-        let isValidationError = false;
-        let v = validateEmail(value);
-        setIsEmailInvalid(false);
-        if (v["is_invalid"] === true) {
-            isValidationError = true;
-            setIsEmailInvalid(true);
-            setEmailError(v["error_message"]);
-        }
-        return isValidationError;
-    }
-    function checkPassword(value) {
-        let isValidationError = false;
-        let v = validateField("Password", value, 8, 15, false);
-        setIsPasswordInvalid(false);
-        if (v["is_invalid"] === true) {
-            isValidationError = true;
-            setIsPasswordInvalid(true);
-            setPasswordError(v["error_message"]);
-        }
-        return isValidationError;
-    }
-    function checkConfirmPassword(value, password) {
-        let isValidationError = false;
-        let v = validateField("Confirm password", value, 8, 15, false);
-        setIsConfirmPasswordInvalid(false);
-        if (v["is_invalid"] === true) {
-            isValidationError = true;
-            setIsConfirmPasswordInvalid(true);
-            setConfirmPasswordError(v["error_message"]);
-        }
-        if (password !== value) {
-            isValidationError = true;
-            setIsConfirmPasswordInvalid(true);
-            setConfirmPasswordError("Confirm password and password must be same.");
-        }
-        return isValidationError;
-    }
-    function checkValues(formData) {
-        let isValidationError = false;
-        if (checkName(formData["name"])) {
-            isValidationError = true;
-        }
-        if (checkEmail(formData["email"])) {
-            isValidationError = true;
-        }
-        if (checkPassword(formData["password"])) {
-            isValidationError = true;
-        }
-        if (checkConfirmPassword(formData["confirm_password"], formData["password"])) {
-            isValidationError = true;
-        }
-        return isValidationError;
-    }
 
     function doSignup() {
         setIsApiError(false);
-        let data = { name, email, password, confirm_password };
+        let data = { name, email, phone, password, confirm_password };
         let dataJson = JSON.stringify(data);
         // console.log(dataJson);
 
-        let isValidationError = checkValues(data);
+        let isValidationError = checkAllFieldsValues(data, inputProps, setApiError);
         if (isValidationError) {
+            return;
+        }
+        if (password !== confirm_password) {
+            isValidationError = true;
+            setIsApiError(true);
+            setApiError("Confirm password and password must be same.");
             return;
         }
         setIsDisplayWaitPage(true);
@@ -170,35 +112,17 @@ function Signup() {
                     {isApiError ? <Alert key="danger" variant="danger">
                         {apiError}
                     </Alert> : ""}
-
-
-                    <input type="text" className="form-control" placeholder="Full Name"
-                        value={name} onChange={(e) => setName(e.target.value)}
-                        onBlur={(e) => checkName(e.target.value)} />
-                    {isNameInvalid ? <span className="text-danger"> {nameError} </span> : ""}
-                    <br />
-
-
-                    <input type="email" className="form-control" placeholder="Email"
-                        value={email} onChange={(e) => setEmail(e.target.value)}
-                        onBlur={(e) => checkEmail(e.target.value)} />
-                    {isEmailInvalid ? <span className="text-danger"> {emailError} </span> : ""}
-                    <br />
-
-
-                    <input type="password" className="form-control" placeholder="Password"
-                        value={password} onChange={(e) => setPassword(e.target.value)}
-                        onBlur={(e) => checkPassword(e.target.value)} />
-                    {isPasswordInvalid ? <span className="text-danger"> {passwordError} </span> : ""}
-                    <br />
-
-
-                    <input type="password" className="form-control" placeholder="Confirm Password"
-                        value={confirm_password} onChange={(e) => setConfirm_Password(e.target.value)}
-                        onBlur={(e) => checkConfirmPassword(e.target.value, password)} />
-                    {isConfirmPasswordInvalid ? <span className="text-danger"> {confirmPasswordError} </span> : ""}
-                    <br />
-
+                    {
+                        Object.keys(inputProps).map((field, key) =>
+                            <AppInput key={key}
+                                type={inputProps[field].type}
+                                name={inputProps[field].name}
+                                setFunction={inputProps[field].setFunction}
+                                validationRule={inputProps[field].rule}
+                                items={inputProps[field].items}
+                            />
+                        )
+                    }
 
                     <input className={`form-control btn btn-${THEME_COLOR}`} type="submit"
                         onClick={doSignup} value="Signup" />

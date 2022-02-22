@@ -40,6 +40,7 @@ function MyOrders() {
                     </Alert> : ""}
                     <Accordion>
                         {
+                            orderList.length === 0 ? <>No order found. <br /><br /></> :
                             orderList.map((order, key) =>
 
                                 <Accordion.Item eventKey={key} key={key} className="mt-3 border-top" >
@@ -49,7 +50,7 @@ function MyOrders() {
                                         &nbsp;-&nbsp; <small className="text-muted">{order.created_at.split('T')[0] + " " + order.created_at.split('T')[1].split('.')[0]} </small>
                                     </Accordion.Header>
                                     <Accordion.Body>
-                                        <OrderDetail orderItems={order.order_items} address={order.address} />
+                                        <OrderDetail orderItems={order.order_items} address={order.app_user_address} />
                                     </Accordion.Body>
                                 </Accordion.Item>
                             )
@@ -79,7 +80,7 @@ function OrderDetail(props) {
                     <CartSummery cartSummary={cartSummary} isAfterPurchase="1" />
                 </div>
                 <div className="col-sm-6 mt-5">
-                    <AddressLebel address={props.address} />
+                    <AddressLebel address={props.address} readOnly="true" />
                 </div>
             </div>
         </>

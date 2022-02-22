@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { THEME_COLOR, API_BASE_URL } from './Constants';
-import { validateEmail, validateField } from './Basic';
+import { checkAllFieldsValues } from './Basic';
 import { Alert } from 'react-bootstrap';
 import WaitPage from './WaitPage';
+import AppInput from '../sub_components/AppInput';
 
 function Login(props) {
     let redirectTo = "/myprofile";
@@ -25,6 +26,10 @@ function Login(props) {
     let [apiError, setApiError] = useState("");
 
     let navigate = useNavigate();
+    let [inputProps] = useState({
+        email: { type: "text", name: "Email", rule: "required|email", setFunction: setEmail },
+        password: { type: "password", name: "Password", rule: "required", setFunction: setPassword }
+    });
 
     function formHandling(e) {
         e.preventDefault();
@@ -35,43 +40,14 @@ function Login(props) {
         document.title = "Login";
     }, []);
 
-    function checkEmail(value) {
-        let isValidationError = false;
-        let v = validateEmail(value);
-        if (v["is_invalid"] === true) {
-            isValidationError = true;
-        }
-        return isValidationError;
-    }
-
-    function checkPassword(value) {
-        let isValidationError = false;
-        let v = validateField("Password", value, 8, 15, false);
-        if (v["is_invalid"] === true) {
-            isValidationError = true;
-        }
-        return isValidationError;
-    }
-    function checkValues(formData) {
-        let isValidationError = false;
-        if (checkEmail(formData["email"])) {
-            isValidationError = true;
-        }
-        if (checkPassword(formData["password"])) {
-            isValidationError = true;
-        }
-        return isValidationError;
-    }
-
+    
     function doLogin() {
         setIsApiError(false);
         let data = { email, password };
         let dataJson = JSON.stringify(data);
 
-        let isValidationError = checkValues(data);
+        let isValidationError = checkAllFieldsValues(data, inputProps, setApiError);
         if (isValidationError) {
-            setIsApiError(true);
-            setApiError("Error: Wrong email or password!");
             return;
         }
         setIsDisplayWaitPage(true);
@@ -127,13 +103,17 @@ function Login(props) {
 
                     <h1 className="card-title text-center">Login</h1>
 
-                    <input type="email" className="form-control" placeholder="Email"
-                        onChange={(e) => setEmail(e.target.value)} required />
-                    <br />
-
-                    <input type="password" className="form-control" placeholder="Password"
-                        onChange={(e) => setPassword(e.target.value)} required />
-                    <br />
+                    {
+                        Object.keys(inputProps).map((field, key) =>
+                            <AppInput key={key}
+                                type={inputProps[field].type}
+                                name={inputProps[field].name}
+                                setFunction={inputProps[field].setFunction}
+                                validationRule={inputProps[field].rule}
+                                items={inputProps[field].items}
+                            />
+                        )
+                    }
 
                     <input className={`form-control btn btn-${THEME_COLOR}`} type="submit"
                         onClick={doLogin} value="Login" />

@@ -98,7 +98,7 @@ export function CartItemList(props) {
         <div>
             {
                 props.cartItems.map((item, key) =>
-                    <CartItem key={key} itemDetail={item} removeFunction={props.removeFunction} isApterPurchase={props.isApterPurchase} />
+                    <CartItem key={key} itemDetail={item} removeFunction={props.removeFunction} isAfterPurchase={props.isAfterPurchase} />
                 )
             }
         </div>
