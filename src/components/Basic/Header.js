@@ -1,6 +1,6 @@
 import { Container, Navbar, Nav, NavDropdown } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import { THEME_COLOR } from './Constants';
+import { BRAND_NAME, THEME_COLOR } from './Constants';
 import { BsCartFill } from 'react-icons/bs';
 
 function Header(props) {
@@ -16,7 +16,7 @@ function Header(props) {
                 <Container>
 
                     {/* <Link className="navbar-brand" to="/"><img src="././epur_big_logo.png" width="100" height="30" className="d-inline-block align-top" alt="e-PUR"/></Link>  */}
-                    <Link className="navbar-brand" to="/">e-PUR</Link>
+                    <Link className="navbar-brand" to="/">{BRAND_NAME}</Link>
                     <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                     <Navbar.Collapse id="responsive-navbar-nav">
                         <Nav className="me-auto">
