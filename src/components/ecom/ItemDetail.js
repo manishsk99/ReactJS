@@ -65,10 +65,10 @@ function ItemDetail() {
                         </div>
                         
                         <div className="row mt-3 mb-4">
-                            <div className="col-3">
+                            <div className="col-3 col-sm-6">
                                 <Button variant="warning" onClick={buyNow} >Buy Now</Button>
                             </div>
-                            <div className="col-3 text-end">
+                            <div className="col-3 col-sm-6 text-end">
                                 <Button variant="primary" onClick={addToCartOpration} >Add to cart</Button>
                             </div>
                         </div>
