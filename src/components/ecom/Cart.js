@@ -1,12 +1,14 @@
 import CartItem from '../sub_components/CartItem';
 import CartSummery from '../sub_components/CartSummary';
 import { Container } from 'react-bootstrap';
-import { useEffect, useState } from 'react';
+import { createContext, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
 import { API_BASE_URL, THEME_COLOR } from '../basic/Constants';
 import { validateInputValue } from '../basic/Basic';
 import WaitPage from '../basic/WaitPage';
+
+export const CartContext = createContext();
 
 function Cart(props) {
     const [cartItems, setCartItems] = useState([]);
@@ -41,11 +43,13 @@ function Cart(props) {
 
 
     return (
-        <>
+        <><CartContext.Provider value={updateCartSummery}>
             {
                 props.viewOnly ?
                     <>
-                        <CartItemList cartItems={cartItems} isApterPurchase="0" />
+
+                        <CartItemList cartItems={cartItems} isAfterPurchase="0" />
+
                         <div className="row mt-4">
                             <div className="col-sm-6"></div>
                             <div className="col-sm-6">
@@ -87,6 +91,7 @@ function Cart(props) {
                     </div>
 
             }
+        </CartContext.Provider>
         </>
     )
 }
@@ -152,9 +157,12 @@ function updateLocalStorageCartItems(cartItems) {
 }
 
 export function updateCartItemQuantity(cartItems, itemId, quantityToAdd, isChange) {
+    let isUpdateLS = false;
     if (cartItems == null) {
+        isUpdateLS = true;
         cartItems = JSON.parse(localStorage.getItem("cart_items"));
     }
+    
     let isItemAlreadyAdded = 0;
     for (let i = 0; i < cartItems.length; i++) {
         const itemLS = cartItems[i];
@@ -167,6 +175,9 @@ export function updateCartItemQuantity(cartItems, itemId, quantityToAdd, isChang
             }
             break;
         }
+    }
+    if (isUpdateLS) {
+        updateLocalStorageCartItems(cartItems);
     }
     return isItemAlreadyAdded;
 }
