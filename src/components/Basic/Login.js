@@ -70,6 +70,7 @@ function Login(props) {
                         localStorage.setItem('is_logged_In', true);
                         localStorage.setItem('name', responseJSON["data"]["name"]);
                         localStorage.setItem('email', responseJSON["data"]["email"]);
+                        localStorage.setItem('phone', responseJSON["data"]["phone"]);
                         localStorage.setItem('userId', responseJSON["data"]["id"]);
                         props.updateLocalData(localStorage);
                         navigate(redirectTo);

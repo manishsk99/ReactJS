@@ -100,7 +100,7 @@ function Signup() {
 
                     <Modal show={isDisplaySuccessModel} aria-labelledby="contained-modal-title-vcenter" centered >
                         <Modal.Body>
-                            <p className='text-success'> Signup Successfull. </p>
+                            <p className='text-success'> Signup Successfull. Please check your email account to verify the email before login. </p>
                         </Modal.Body>
                         <Modal.Footer>
                             <Button onClick={signupDone} className={`btn btn-${THEME_COLOR}`} >Login</Button>
