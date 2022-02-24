@@ -18,7 +18,6 @@ import Footer from './components/basic/Footer';
 import Ecom from './components/ecom/Ecom';
 import Cart from './components/ecom/Cart';
 import MyProfile from './components/basic/MyProfile';
-import AddItem from './components/ecom/AddItem';
 import AddAddress from './components/ecom/AddAddress';
 import Transactions from './components/payment/Transactions';
 import AccountHome from './components/basic/AccountHome';
@@ -30,6 +29,13 @@ import MakePayment from './components/ecom/MakePayment';
 import ConfirmPage from './components/ecom/ConfirmPage';
 import MyOrders from './components/ecom/MyOrders';
 import ProtectedRoute from './components/basic/ProtectedRoute';
+
+import SellerHome from './components/seller/SellerHome';
+import SellerLogin from './components/seller/SellerLogin';
+import SellerProfile from './components/seller/SellerProfile';
+import AddItem from './components/seller/AddItem';
+import ManageItem from './components/seller/ManageItem';
+import SellerOrder from './components/seller/SellerOrder';
 
 export const HeaderContext = createContext();
 
@@ -94,7 +100,11 @@ function App() {
             <Route path="/orderconfirm" element={<ProtectedRoute component={ConfirmPage} />} />
 
             {/* Seller route */}
-            <Route path="/additem" element={<AccountHome comp={AddItem} />} />
+            <Route path="/slogin" element={<SellerLogin updateLocalData={updateLocalData} />} />
+            <Route path="/sprofile" element={<SellerHome comp={SellerProfile} />} />
+            <Route path="/sorders" element={<SellerHome comp={SellerOrder} />} />
+            <Route path="/additem" element={<SellerHome comp={AddItem} />} />
+            <Route path="/manageitem" element={<SellerHome comp={ManageItem} />} />
 
             {/* Default route */}
             <Route exact path="/" element={<HeaderContext.Provider value={updateCartItemCount}><Ecom /></HeaderContext.Provider>} />
