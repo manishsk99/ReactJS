@@ -45,7 +45,7 @@ function App() {
   useEffect(() => {
     let localDataTemp = {};
     localDataTemp["is_logged_In"] = localStorage.getItem("is_logged_In");
-    localDataTemp["user_data"] = localStorage.getItem("user_data");
+    localDataTemp["is_seller_logged_In"] = localStorage.getItem("is_seller_logged_In");
     setLocalData(localDataTemp);
     updateCartItemCount();
   }, []);
@@ -53,7 +53,7 @@ function App() {
   function updateLocalData(localStorageObj) {
     let localDataTemp = {};
     localDataTemp["is_logged_In"] = localStorageObj.getItem("is_logged_In");
-    localDataTemp["user_data"] = localStorageObj.getItem("user_data");
+    localDataTemp["is_seller_logged_In"] = localStorageObj.getItem("is_seller_logged_In");
     setLocalData(localDataTemp);
   }
 

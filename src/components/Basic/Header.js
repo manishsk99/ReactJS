@@ -3,11 +3,18 @@ import { Link } from 'react-router-dom';
 import { BRAND_NAME, THEME_COLOR } from './Constants';
 import { BsCartFill } from 'react-icons/bs';
 
+export function logoutUser(updateLocalData) {
+    localStorage.removeItem('is_logged_In');
+    localStorage.removeItem('email');
+    localStorage.removeItem('userId');
+    localStorage.removeItem('phone');
+    updateLocalData(localStorage);
+}
+
 function Header(props) {
+
     function logout() {
-        localStorage.removeItem('is_logged_In');
-        localStorage.removeItem('user_detail');
-        props.updateLocalData(localStorage);
+        logoutUser(props.updateLocalData);
     }
 
     return (
@@ -25,15 +32,16 @@ function Header(props) {
                             <Nav.Link eventKey="3" as={Link} to="/contact">Contact Us</Nav.Link>
                         </Nav>
                         <Nav>
-
-                            <Nav.Link eventKey="4" as={Link} className="text-white position-relative" to="/cart">
-                                <BsCartFill />
-                                <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                                    {props.cartItemCount}
-                                    <span className="visually-hidden">No. of items</span>
-                                </span>
-                            </Nav.Link>
-
+                            {
+                                props.localData["is_seller_logged_In"] ? "" :
+                                    <Nav.Link eventKey="4" as={Link} className="text-white position-relative" to="/cart">
+                                        <BsCartFill />
+                                        <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                            {props.cartItemCount}
+                                            <span className="visually-hidden">No. of items</span>
+                                        </span>
+                                    </Nav.Link>
+                            }
                             {props.localData["is_logged_In"] ?
                                 <NavDropdown title="My Account" id="collasible-nav-dropdown">
                                     <NavDropdown.Item eventKey="6" as={Link} to="/myprofile">Profile</NavDropdown.Item>
@@ -45,7 +53,9 @@ function Header(props) {
                                 :
                                 props.localData["is_seller_logged_In"] ?
                                     <NavDropdown title="Dashboard" id="collasible-nav-dropdown">
-                                        <NavDropdown.Item eventKey="6" as={Link} to="/myprofile">Profile</NavDropdown.Item>
+                                        <NavDropdown.Item eventKey="6" as={Link} to="/sprofile">Profile</NavDropdown.Item>
+                                        <NavDropdown.Item eventKey="6" as={Link} to="/sorders">Orders</NavDropdown.Item>
+                                        <NavDropdown.Item eventKey="7" as={Link} to="/manageitem">Manage Items</NavDropdown.Item>
                                         <NavDropdown.Item eventKey="7" as={Link} to="/additem">Add Item</NavDropdown.Item>
                                         <NavDropdown.Divider />
                                         <NavDropdown.Item eventKey="9" as={Link} to="/logout" onClick={logout}>Logout</NavDropdown.Item>

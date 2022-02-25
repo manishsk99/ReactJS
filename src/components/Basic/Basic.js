@@ -89,7 +89,7 @@ export function validateInputValue(fieldValueType, fieldName, fieldValue, valida
     // console.log('fieldValue::' + typeof fieldValue);
     var fieldValue1 = fieldValue;
     if(fieldValue && !isNumberOnly) {
-        fieldValue.replace(/(\r\n|\n|\r)/g, "  ");
+        fieldValue1 = fieldValue.replace(/(\r\n|\n|\r)/g, "  ");
     }
     // console.log('fieldValue1::' + fieldValue1.length);
     if (isMandatory && fieldValue === "") {

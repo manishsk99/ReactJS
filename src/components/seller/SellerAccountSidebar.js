@@ -5,10 +5,10 @@ function SellerAccountSidebar() {
     return (
         <ListGroup defaultActiveKey="#">
             <ListGroup.Item action as={Link} to="/sprofile" href="#link1">
-                My profile
+                profile
             </ListGroup.Item>
             <ListGroup.Item action as={Link} to="/sorders" href="#link3">
-                My Orders
+                Orders
             </ListGroup.Item>
             <ListGroup.Item action as={Link} to="/manageitem" href="#link4">
                 Manage Item

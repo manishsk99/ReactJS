@@ -5,6 +5,7 @@ import { checkAllFieldsValues } from '../basic/Basic';
 import { Alert } from 'react-bootstrap';
 import AppInput from '../sub_components/AppInput';
 import WaitPage from '../basic/WaitPage';
+import { logoutUser } from '../basic/Header';
 
 function SellerLogin(props) {
     let [isDisplayWaitPage, setIsDisplayWaitPage] = useState(false);
@@ -25,14 +26,13 @@ function SellerLogin(props) {
     function formHandling(e) {
         e.preventDefault();
     }
-
-
+    
     useEffect(() => {
         document.title = "Seller Login";
     }, []);
-
     
     function doSellerLogin() {
+        logoutUser(props.updateLocalData);
         setIsApiError(false);
         let data = { email, password };
         let dataJson = JSON.stringify(data);
@@ -55,7 +55,7 @@ function SellerLogin(props) {
                 (responseJSON) => {
                     setWaitPageProgress(90);
                     setIsDisplayWaitPage(false);
-                    // console.log(responseJSON);
+                    console.log(responseJSON);
                     // console.log("API Status:: " + responseJSON["success"]);
                     if (responseJSON["success"]) {
                         localStorage.setItem('is_seller_logged_In', true);
@@ -82,7 +82,7 @@ function SellerLogin(props) {
     return (
         <div className="row justify-content-center p-4">
             <div className="card col-sm-8 col-lg-4 p-4">
-                <form onSubmit={formHandling}>
+                <form onSubmit={formHandling} >
                     <h1 className="card-title text-center">Seller Login</h1>
 
                     <WaitPage isDisplay={isDisplayWaitPage} progress={waitPageProgress} />

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Alert, Button, Modal } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 import { validateInputValue, apiGetCall } from "../basic/Basic";
 import { API_BASE_URL, THEME_COLOR } from "../basic/Constants";
 import WaitPage from "../basic/WaitPage";
@@ -30,6 +31,7 @@ function AddItem() {
     let [primaryImageError, setPrimaryImageError] = useState("");
     let [otherImage, setOtherImage] = useState(null);
     let [otherImageError, setOtherImageError] = useState("");
+    let navigate = useNavigate();
 
     let [inputProps] = useState({
         name: { type: "text", name: "Item Name", rule: "required", setFunction: setName },
@@ -72,7 +74,7 @@ function AddItem() {
 
     function selectOtherImage(e) {
         let files = e.target.files;
-        console.log(files);
+        // console.log(files);
         setOtherImage(files);
     }
 
@@ -93,6 +95,7 @@ function AddItem() {
 
     function addItem() {
         let formData = new FormData();
+        formData.append("sellers_id", localStorage.getItem("sellerId"));
         formData.append("name", name);
         formData.append("short_description", shortDescription);
         formData.append("description", description);
@@ -105,10 +108,11 @@ function AddItem() {
         formData.append("width", width);
         formData.append("height", height);
         formData.append("primary_image", primaryImage);
-        for (var i = 0; i < otherImage.length; i++) {
-            formData.append("other_images[]", otherImage[i]);
+        if (otherImage !== null) {
+            for (var i = 0; i < otherImage.length; i++) {
+                formData.append("other_images[]", otherImage[i]);
+            }
         }
-
         // console.log(formData.get("other_images"));
         setIsApiError(false);
         setPrimaryImageError("");
@@ -117,10 +121,15 @@ function AddItem() {
             setPrimaryImageError("Please select primary image");
             return;
         }
-
+        
         let isValidationError = checkValues(formData);
         // console.log("isValidationError::" + isValidationError);
         if (isValidationError) {
+            setIsApiError(true);
+            return;
+        }
+        if(sellingPrice > mrp) {
+            setApiError("Selling price should be less then on equal to mrp.");
             setIsApiError(true);
             return;
         }
@@ -155,6 +164,11 @@ function AddItem() {
             )
     }
 
+    function closeSuccessModel() {
+        setIsDisplaySuccessModel(false)
+        navigate('/manageitem');
+    }
+
     return (
         <div className="row justify-content-left">
             <div className="card col-sm-8 col-lg-6">
@@ -166,7 +180,7 @@ function AddItem() {
                             <p className='text-success'> {title} Successfull. </p>
                         </Modal.Body>
                         <Modal.Footer>
-                            <Button onClick={() => setIsDisplaySuccessModel(false)} className={`btn btn-${THEME_COLOR}`} >Close</Button>
+                            <Button onClick={closeSuccessModel} className={`btn btn-${THEME_COLOR}`} >Close</Button>
                         </Modal.Footer>
                     </Modal>
 
@@ -200,7 +214,7 @@ function AddItem() {
                     )
                     }
 
-                    <label>Primary image (Only jpg, jpeg or png)</label>
+                    <label>Primary image (Only jpg, jpeg or png)*</label>
                     <input type="file" className="form-control" name="primaryImage"
                         onChange={(e) => selectImage(e)} accept="image/*" />
                     {primaryImageError !== "" ? <><span className="text-danger"> {primaryImageError} </span><br /></> : ""}
