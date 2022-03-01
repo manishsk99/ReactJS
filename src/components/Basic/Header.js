@@ -11,10 +11,19 @@ export function logoutUser(updateLocalData) {
     updateLocalData(localStorage);
 }
 
+export function logoutSeller(updateLocalData) {
+    localStorage.removeItem('is_seller_logged_In');
+    localStorage.removeItem('sellerId');
+    updateLocalData(localStorage);
+}
+
 function Header(props) {
 
     function logout() {
         logoutUser(props.updateLocalData);
+    }
+    function slogout() {
+        logoutSeller(props.updateLocalData);
     }
 
     return (
@@ -58,7 +67,7 @@ function Header(props) {
                                         <NavDropdown.Item eventKey="7" as={Link} to="/manageitem">Manage Items</NavDropdown.Item>
                                         <NavDropdown.Item eventKey="7" as={Link} to="/additem">Add Item</NavDropdown.Item>
                                         <NavDropdown.Divider />
-                                        <NavDropdown.Item eventKey="9" as={Link} to="/logout" onClick={logout}>Logout</NavDropdown.Item>
+                                        <NavDropdown.Item eventKey="9" as={Link} to="/logout" onClick={slogout}>Logout</NavDropdown.Item>
                                     </NavDropdown>
                                     :
                                     <Nav.Link eventKey="5" as={Link} to="/login">Login</Nav.Link>
