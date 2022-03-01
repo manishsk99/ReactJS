@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
+import { Form } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { apiGetCall } from "../basic/Basic";
 import { IMAGE_BASE_URL } from "../basic/Constants";
 import WaitPage from "../basic/WaitPage";
-import ItemCardsList from '../sub_components/ItemCardsList';
 
 function ManageItem() {
     let [isDisplayWaitPage, setIsDisplayWaitPage] = useState(false);
@@ -40,7 +40,7 @@ function ManageItem() {
                     </div>
                     {items.length === 0
                         ? <><br />No items added yet <br /><br /></>
-                        : <ItemCardsList data={items} />
+                        : <ItemListTable items={items} />
                     }
                 </div>
             </div>
@@ -56,10 +56,11 @@ export function ItemListTable(props) {
         <div className="overflow-auto">
             {
                 props.items.length === 0 ? <><br />No items added yet <br /><br /></> :
-                    <table className="table table-striped table-hover">
+                    <table className="table table-striped table-hover align-middle table-bordered border-white">
                         <thead>
                             <tr>
                                 <th scope="col">#</th>
+                                <th scope="col">Primary Image</th>
                                 <th scope="col">Name</th>
                                 <th scope="col">Short description</th>
                                 <th scope="col">Description</th>
@@ -69,13 +70,25 @@ export function ItemListTable(props) {
                                 <th scope="col">Length</th>
                                 <th scope="col">Width</th>
                                 <th scope="col">Height</th>
-                                <th scope="col">Height</th>
+                                <th scope="col">Opretion</th>
                             </tr>
                         </thead>
                         <tbody>
                             {props.items.map((item, key) =>
                                 <tr key={key}>
-                                    <th scope="row">{item.id}</th>
+                                    <td>
+                                        <Form.Check 
+                                            type="switch"
+                                            id="custom-switch"
+                                            label="ON"
+                                            defaultChecked={false}
+                                        />
+                                    </td>
+                                    <td>
+                                        <Link to={"../itemDetail/" + item.id} >
+                                            <img src={IMAGE_BASE_URL + item.primary_image} className="img-thumbnail" alt={item.name} />
+                                        </Link>
+                                    </td>
                                     <td>{item.name}</td>
                                     <td>{item.short_description}</td>
                                     <td><span className="d-inline-block text-truncate" style={{ maxWidth: "150px" }}>{item.description}</span></td>
@@ -85,7 +98,7 @@ export function ItemListTable(props) {
                                     <td>{item.length}</td>
                                     <td>{item.width}</td>
                                     <td>{item.height}</td>
-                                    <td><img src={IMAGE_BASE_URL + item.primary_image} className="" alt={item.name} /></td>
+                                    <td><Link to="#">Edit</Link><br /><Link to="#">Delete</Link></td>
                                 </tr>
                             )
                             }
