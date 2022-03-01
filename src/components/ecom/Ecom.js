@@ -4,6 +4,7 @@ import { Alert, Container } from 'react-bootstrap';
 import { useEffect, useState } from 'react';
 import WaitPage from '../basic/WaitPage';
 import { API_BASE_URL } from '../basic/Constants';
+import { HOME_BANNER_LIST } from '../basic/StaticData';
 
 function Ecom() {
     let [isDisplayWaitPage, setIsDisplayWaitPage] = useState(false);
@@ -54,7 +55,7 @@ function Ecom() {
 
     return (
         <>
-            <AppCarousel />
+            <AppCarousel bannerList = {HOME_BANNER_LIST} />
             <Container>
                 <WaitPage isDisplay={isDisplayWaitPage} progress={waitPageProgress} />
 
