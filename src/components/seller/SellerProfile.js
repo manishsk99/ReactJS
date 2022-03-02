@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { Alert } from "react-bootstrap";
 import { apiGetCall } from "../basic/Basic";
 import WaitPage from "../basic/WaitPage";
+import AppError from "../sub_components/AppError";
 
 function SellerProfile() {
     let [isDisplayWaitPage, setIsDisplayWaitPage] = useState(false);
@@ -29,9 +29,7 @@ function SellerProfile() {
     return (
         <div className="card col-lg-6 offset-lg-2 p-4">
             <WaitPage isDisplay={isDisplayWaitPage} progress={waitPageProgress} />
-            {apiError ? <Alert key="danger" variant="danger">
-                {apiError}
-            </Alert> : ""}
+            <AppError errorText={apiError} />
 
             <h1 className="card-title text-center">My Profile</h1>
             <br />

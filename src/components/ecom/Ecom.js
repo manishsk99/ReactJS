@@ -1,16 +1,16 @@
 import ItemCardsList from '../sub_components/ItemCardsList';
 import AppCarousel from '../sub_components/AppCarousel';
-import { Alert, Container } from 'react-bootstrap';
+import { Container } from 'react-bootstrap';
 import { useEffect, useState } from 'react';
 import WaitPage from '../basic/WaitPage';
 import { API_BASE_URL } from '../basic/Constants';
 import { HOME_BANNER_LIST } from '../basic/StaticData';
+import AppError from '../sub_components/AppError';
 
 function Ecom() {
     let [isDisplayWaitPage, setIsDisplayWaitPage] = useState(false);
     let [waitPageProgress, setWaitPageProgress] = useState(10);
 
-    let [isApiError, setIsApiError] = useState(false);
     let [apiError, setApiError] = useState("");
 
     let [itemsList, setItemsList] = useState([]);
@@ -18,7 +18,6 @@ function Ecom() {
     useEffect(() => {
 
         document.title = "Home";
-        setIsApiError(false);
 
         setIsDisplayWaitPage(true);
         setWaitPageProgress(50);
@@ -34,7 +33,6 @@ function Ecom() {
                         setItemsList(responseJSON["data"]);
                         localStorage.setItem('items_json', JSON.stringify(responseJSON["data"]));
                     } else {
-                        setIsApiError(true);
                         setApiError("Some error occurred.");
                         if (responseJSON["success"] === false) {
                             setApiError(responseJSON["message"]);
@@ -44,7 +42,6 @@ function Ecom() {
                 (error) => {
                     // console.log("Error:: " + error);
                     setIsDisplayWaitPage(false);
-                    setIsApiError(true);
                     setApiError("Some error occurred.");
                     if(localStorage.getItem('items_json')) {
                         setItemsList( JSON.parse(localStorage.getItem('items_json')));
@@ -58,10 +55,7 @@ function Ecom() {
             <AppCarousel bannerList = {HOME_BANNER_LIST} />
             <Container>
                 <WaitPage isDisplay={isDisplayWaitPage} progress={waitPageProgress} />
-
-                {isApiError ? <><br /> <Alert key="danger" variant="danger">
-                        {apiError}
-                    </Alert></> : ""}
+                <AppError errorText={apiError} />
 
                 <ItemCardsList data={itemsList} />
             </Container>
