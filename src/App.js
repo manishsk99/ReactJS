@@ -3,6 +3,7 @@ import { useState, useEffect, createContext } from 'react';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'react-toastify/dist/ReactToastify.css';
+import 'react-image-gallery/styles/css/image-gallery.css';
 import './components/basic/Basic.css';
 import Header from './components/basic/Header';
 import Home from './components/basic/Home';
