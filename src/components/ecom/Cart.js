@@ -208,8 +208,22 @@ function PinCodeBox() {
 
     useEffect(() => {
         if (localStorage.getItem("pin_code")) {
-            setPinCode(localStorage.getItem("pin_code"));
+            let pinCode = localStorage.getItem("pin_code");
+            setPinCode(pinCode);
             // checkPinCode();
+            setPinCodeError("");
+            setPinCodeSuccess("");
+            fetch(API_BASE_URL + "checkpin/" + pinCode).then(res => res.json())
+                .then(
+                    (responseJSON) => {
+                        // console.log("API Status:: " + JSON.stringify(responseJSON));
+                        if (responseJSON["success"]) {
+                            setPinCodeSuccess(responseJSON["message"]);
+                        } else {
+                            setPinCodeError(responseJSON["message"]);
+                        }
+                    }
+                );
         }
     }, []);
 
@@ -229,6 +243,7 @@ function PinCodeBox() {
         if (isValidationError) {
             return;
         }
+        localStorage.setItem("pin_code", pinCode);
         setIsDisplayWaitPage(true);
         setWaitPageProgress(50);
         setPinCodeError("");
@@ -240,19 +255,25 @@ function PinCodeBox() {
                     // console.log("API Status:: " + JSON.stringify(responseJSON));
                     if (responseJSON["success"]) {
                         setPinCodeSuccess(responseJSON["message"]);
-                        localStorage.setItem("pin_code", pinCode);
                     } else {
                         setPinCodeError(responseJSON["message"]);
                     }
                 }
             );
     }
+
+    function handlePinCodeValue(e) {
+        setPinCodeError("");
+        setPinCodeSuccess("");
+        setPinCode(e.target.value);
+    }
+
     return (
         <div>
             <WaitPage isDisplay={isDisplayWaitPage} progress={waitPageProgress} />
             <div className="input-group">
                 <input type="text" className="form-control" placeholder="Pin Code" maxLength="6"
-                    value={pinCode} onChange={(e) => setPinCode(e.target.value)}
+                    value={pinCode} onChange={(e) => handlePinCodeValue(e)}
                     onBlur={(e) => checkField(e.target.value)} />
 
                 <button className="btn btn-outline-secondary" type="button" onClick={checkPinCode} >check</button>

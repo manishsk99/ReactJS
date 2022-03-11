@@ -108,29 +108,29 @@ function ItemDetail() {
                             <tbody>
                                 {item.color ?
                                     <tr>
-                                        <td>Metarial</td>
+                                        <td>Color</td>
                                         <td>{item.color}</td>
                                     </tr>
                                     : <tr />}
-                                {item.metarial ?
+                                {item.meterial ?
                                     <tr>
-                                        <td>Metarial</td>
-                                        <td>{item.metarial}</td>
+                                        <td>Material</td>
+                                        <td>{item.meterial}</td>
                                     </tr>
                                     : <tr />}
-                                {item.length ?
+                                {item.length && item.length > 0 ?
                                     <tr>
                                         <td>Length</td>
                                         <td>{item.length}</td>
                                     </tr>
                                     : <tr />}
-                                {item.width ?
+                                {item.width && item.width > 0 ?
                                     <tr>
                                         <td>Width</td>
                                         <td>{item.width}</td>
                                     </tr>
                                     : <tr />}
-                                {item.height ?
+                                {item.height && item.height > 0 ?
                                     <tr>
                                         <td>Height</td>
                                         <td>{item.height}</td>
